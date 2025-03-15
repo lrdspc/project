@@ -1,23 +1,46 @@
 {
   "name": "Brasilit - Sistema de Vistorias",
   "short_name": "Brasilit",
-  "description": "Sistema de vistorias técnicas para coberturas",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#2563eb",
+  "theme_color": "#3B82F6",
+  "description": "Sistema de Vistorias Técnicas Brasilit",
   "icons": [
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-512x512.png", 
+      "src": "/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Iniciar Nova Vistoria",
+      "short_name": "Nova Vistoria",
+      "description": "Iniciar uma nova vistoria técnica",
+      "url": "/nova-vistoria",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Lista de Clientes",
+      "short_name": "Clientes",
+      "description": "Ver lista de clientes cadastrados",
+      "url": "/clientes",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png"
     }
   ]
 }
