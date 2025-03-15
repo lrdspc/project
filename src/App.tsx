@@ -5,6 +5,7 @@ import PrivateRoute from './components/layout/PrivateRoute';
 import UserMenu from './components/layout/UserMenu';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import ResetPassword from './pages/auth/ResetPassword';
 import { 
   Bell, 
   Search, 
@@ -30,6 +31,7 @@ import Reports from './pages/Reports';
 import Clients from './pages/Clients';
 import Calendar from './pages/Calendar';
 import SupabaseTest from './pages/SupabaseTest';
+import Diagnostics from './pages/Diagnostics';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
@@ -44,7 +46,9 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/redefinir-senha" element={<ResetPassword />} />
           <Route path="/supabase-test" element={<SupabaseTest />} />
+          <Route path="/diagnosticos" element={<Diagnostics />} />
           <Route path="/*" element={
             <PrivateRoute>
               <div className="flex h-screen bg-gray-50">

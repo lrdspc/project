@@ -2,14 +2,14 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
   LayoutDashboard, 
-  ClipboardList, 
   Users, 
   Calendar, 
   Settings, 
   HelpCircle, 
   FilePlus,
   FileText,
-  RefreshCw
+  RefreshCw,
+  Terminal
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -23,6 +23,7 @@ const Sidebar = () => {
   ];
 
   const secondaryNavigation = [
+    { name: 'Diagnósticos', icon: Terminal, path: '/diagnosticos' },
     { name: 'Central de Ajuda', icon: HelpCircle, path: '/ajuda' },
     { name: 'Configurações', icon: Settings, path: '/configuracoes' },
   ];

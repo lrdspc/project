@@ -9,14 +9,38 @@
     <meta name="theme-color" content="#2563eb" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    <!-- MCP Browser Tools Integration -->
+    <script src="/mcp-browser-tools.js"></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js');
+        window.addEventListener('load', async () => {
+          try {
+            const registration = await navigator.serviceWorker.register('/sw.js', {
+              scope: '/'
+            });
+            console.log('Service Worker registrado com sucesso:', registration.scope);
+            
+            // Verifica atualizações do Service Worker
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              console.log('Novo Service Worker instalando...');
+              
+              newWorker.addEventListener('statechange', () => {
+                console.log('Service Worker state:', newWorker.state);
+              });
+            });
+          } catch (error) {
+            console.error('Erro ao registrar Service Worker:', error);
+          }
+        });
+        
+        // Detecta quando um novo Service Worker assume o controle
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          console.log('Novo Service Worker assumiu o controle da página');
         });
       }
     </script>
