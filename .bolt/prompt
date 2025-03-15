@@ -1,0 +1,72 @@
+I'll create a focused prompt for PWA (Progressive Web App) development. Here it is:
+
+Maintain code style consistency in PWA development:
+- Use 2 spaces for indentation
+- Component names in PascalCase
+- CSS classes in kebab-case
+- Store global state variables clearly
+- Follow responsive design patterns
+- Implement mobile-first approach
+- Ensure cross-browser compatibility
+
+PWA documentation standards:
+- Document offline capabilities and strategies
+- Include service worker functionality details
+- Provide clear installation instructions
+- Document caching strategies
+- Explain push notification implementation
+- Add comments for complex UI interactions
+- Include manifest.json configuration details
+
+Implement PWA-specific error handling:
+- Handle offline scenarios gracefully
+- Provide fallbacks for unavailable features
+- Implement retry mechanisms for failed network requests
+- Cache essential error messages for offline display
+- Log sync failures for background sync operations
+- Show user-friendly notifications for sync status
+
+Test your PWA thoroughly:
+- Test on multiple devices and screen sizes
+- Verify offline functionality works as expected
+- Test installation process across platforms
+- Validate push notification delivery
+- Ensure service worker updates properly
+- Test with slow network conditions
+- Verify cache invalidation strategies
+
+Prefer these PWA technologies:
+- Workbox for service worker management
+- React or Vue.js for component architecture
+- IndexedDB for client-side storage
+- Web Push API for notifications
+- Lighthouse for PWA auditing
+- CSS Grid and Flexbox for layouts
+- Webpack for bundling and optimization
+
+Optimize PWA performance:
+- Implement effective caching strategies
+- Use lazy-loading for non-critical resources
+- Optimize images with WebP format
+- Implement code-splitting for faster initial load
+- Ensure app shell loads instantly
+- Minimize main thread work
+- Use IntersectionObserver for lazy components
+
+Ensure PWA security:
+- Serve all content over HTTPS
+- Implement proper Content Security Policy
+- Use secure storage for sensitive data
+- Validate all user inputs
+- Implement token-based authentication
+- Secure your push notification endpoints
+- Use credential management API appropriately
+
+Structure your PWA architecture:
+- Separate application shell from content
+- Implement the PRPL pattern (Push, Render, Pre-cache, Lazy-load)
+- Use the App Shell architecture model
+- Keep critical rendering path minimal
+- Design for offline-first experience
+- Implement background sync for offline actions
+- Create modular service worker architecture
