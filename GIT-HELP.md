@@ -2,20 +2,35 @@
 
 Este guia descreve como usar o controle de versão Git configurado neste projeto.
 
-## Scripts Utilitários
+## Sistema de Salvamento Automático
 
-Criamos dois scripts que facilitam o uso do Git:
+O projeto inclui um sistema de salvamento automático que monitora e salva suas mudanças sem necessidade de intervenção manual.
+
+### Como usar o Salvamento Automático:
+
+1. **Iniciar o monitoramento automático:**
+   - Clique no atalho "Auto Save Git" na sua Área de Trabalho
+   - Ou execute diretamente o arquivo `git-auto-save.bat`
+
+2. **Funcionamento:**
+   - O sistema verificará se existem mudanças a cada 15 minutos
+   - Se houver mudanças, elas serão automaticamente salvas com um timestamp
+   - O monitoramento continuará até você fechar a janela ou pressionar CTRL+C
+
+3. **Criar atalho para a Área de Trabalho:**
+   - Execute o arquivo `criar-atalho-autosave.bat` para criar o atalho
+
+## Scripts Utilitários Adicionais
+
+Além do salvamento automático, o projeto inclui scripts úteis para operações manuais:
 
 ### 1. Auto-Commit (auto-commit.bat)
 
-Este script automatiza o processo de commit, salvando todas as mudanças com um timestamp.
+Este script permite fazer um commit manual quando desejado.
 
 **Como usar:**
-- Simplesmente execute o arquivo `auto-commit.bat` clicando duas vezes ou pelo terminal
-- O script adicionará todas as mudanças e fará um commit com a data e hora atuais
-- Use regularmente durante o desenvolvimento para criar "pontos de restauração"
-
-**Recomendação:** Execute a cada 30-60 minutos de trabalho ou após concluir uma funcionalidade.
+- Execute o arquivo `auto-commit.bat` quando quiser salvar manualmente
+- Útil para criar pontos de salvamento específicos antes de grandes mudanças
 
 ### 2. Restauração (git-restore.bat)
 
@@ -69,10 +84,11 @@ git bundle create projeto-backup.bundle HEAD master
 
 ## Boas Práticas
 
-1. **Commits Frequentes:** Faça commits pequenos e frequentes para facilitar a recuperação
-2. **Mensagens Claras:** Use mensagens descritivas nos commits manuais
-3. **Backups Externos:** Periodicamente, copie a pasta `.git` para outro local como backup adicional
-4. **Teste Após Restauração:** Após restaurar uma versão, verifique se tudo funciona corretamente
+1. **Salvamento Automático:** Mantenha o script de salvamento automático sempre ativo durante o desenvolvimento
+2. **Salvamentos Manuais:** Antes de fazer mudanças drásticas, faça um commit manual adicional
+3. **Verificação:** Após implementar funcionalidades importantes, verifique se tudo funciona antes de continuar
+4. **Backups Externos:** Periodicamente, copie a pasta `.git` para outro local como backup adicional
+5. **Teste Após Restauração:** Após restaurar uma versão, verifique se tudo funciona corretamente
 
 ---
 
