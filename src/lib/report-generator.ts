@@ -101,6 +101,10 @@ export class ReportGenerator {
    */
   public static async generateReport(inspection: Inspection): Promise<Blob> {
     console.time('createDocument');
+    
+    // Obter seções de não conformidades de forma assíncrona
+    const nonConformitiesSections = await this.createNonConformitiesSection(inspection);
+    
     const doc = new Document({
       creator: inspection.teamInfo?.technician || "Técnico Brasilit",
       title: `Relatório de Inspeção - ${inspection.client.name}`,
@@ -205,10 +209,10 @@ export class ReportGenerator {
           properties: {
             page: {
               margin: {
-                top: 700,
-                right: 700,
-                bottom: 700,
-                left: 700,
+                top: 1440, // 1 inch (1440 twips) - espaço para o cabeçalho
+                right: 1440, // 1 inch
+                bottom: 1440, // 1 inch - espaço para o rodapé
+                left: 1440, // 1 inch
               },
             },
           },
@@ -216,15 +220,25 @@ export class ReportGenerator {
             default: new Header({
               children: [
                 new Paragraph({
-                  alignment: AlignmentType.RIGHT,
+                  alignment: AlignmentType.LEFT,
                   children: [
                     new ImageRun({
-                      data: BRASILIT_LOGO_BASE64,
+                      data: this.getLogoData(),
                       transformation: {
-                        width: 120,
-                        height: 50,
+                        width: 150,
+                        height: 60,
                       },
-                      type: 'png'
+                      type: "png",
+                    }),
+                  ],
+                }),
+                new Paragraph({
+                  alignment: AlignmentType.RIGHT,
+                  children: [
+                    new TextRun({
+                      text: `Relatório de Inspeção - ${format(new Date(inspection.date), 'dd/MM/yyyy', { locale: ptBR })}`,
+                      font: "Times New Roman",
+                      size: 20, // 10pt
                     }),
                   ],
                 }),
@@ -239,9 +253,9 @@ export class ReportGenerator {
                   children: [
                     new TextRun({
                       text: COMPANY_CONTACT_INFO.name,
+                      font: "Times New Roman",
+                      size: 16, // 8pt
                       bold: true,
-                      size: 18,
-                      font: "Times New Roman",
                     }),
                   ],
                 }),
@@ -249,9 +263,9 @@ export class ReportGenerator {
                   alignment: AlignmentType.CENTER,
                   children: [
                     new TextRun({
-                      text: `${COMPANY_CONTACT_INFO.address}, ${COMPANY_CONTACT_INFO.city}`,
-                      size: 16,
+                      text: `${COMPANY_CONTACT_INFO.address}, ${COMPANY_CONTACT_INFO.city} | Tel: ${COMPANY_CONTACT_INFO.phone}`,
                       font: "Times New Roman",
+                      size: 16, // 8pt
                     }),
                   ],
                 }),
@@ -259,20 +273,36 @@ export class ReportGenerator {
                   alignment: AlignmentType.CENTER,
                   children: [
                     new TextRun({
-                      text: `Tel: ${COMPANY_CONTACT_INFO.phone} | ${COMPANY_CONTACT_INFO.website} | ${COMPANY_CONTACT_INFO.email}`,
-                      size: 16,
+                      text: `${COMPANY_CONTACT_INFO.website} | ${COMPANY_CONTACT_INFO.email}`,
                       font: "Times New Roman",
+                      size: 16, // 8pt
                     }),
                   ],
                 }),
                 new Paragraph({
-                  alignment: AlignmentType.CENTER,
+                  alignment: AlignmentType.RIGHT,
                   children: [
                     new TextRun({
-                      text: "Relatório gerado em " + 
-                        format(new Date(), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR }),
-                      size: 16,
+                      text: "Página ",
                       font: "Times New Roman",
+                      size: 16, // 8pt
+                    }),
+                    // Campo automático de número de página
+                    new TextRun({
+                      children: ["PAGE"],
+                      font: "Times New Roman",
+                      size: 16, // 8pt
+                    }),
+                    new TextRun({
+                      text: " de ",
+                      font: "Times New Roman",
+                      size: 16, // 8pt
+                    }),
+                    // Campo automático de total de páginas
+                    new TextRun({
+                      children: ["NUMPAGES"],
+                      font: "Times New Roman",
+                      size: 16, // 8pt
                     }),
                   ],
                 }),
@@ -280,183 +310,81 @@ export class ReportGenerator {
             }),
           },
           children: [
-            // Título do Relatório
+            // Título do relatório
             new Paragraph({
+              text: `RELATÓRIO DE INSPEÇÃO TÉCNICA`,
               heading: HeadingLevel.HEADING_1,
               alignment: AlignmentType.CENTER,
-              children: [
-                new TextRun({
-                  text: "RELATÓRIO DE INSPEÇÃO TÉCNICA",
-                  bold: true,
-                  size: 32,
-                  font: "Times New Roman",
-                }),
-              ],
-            }),
-
-            // Resultado
-            new Paragraph({
-              alignment: AlignmentType.CENTER,
-              children: [
-                new TextRun({
-                  text: "RESULTADO DA ANÁLISE: ",
-                  bold: true,
-                  size: 24,
-                  font: "Times New Roman",
-                }),
-                new TextRun({
-                  text: "IMPROCEDENTE",
-                  bold: true,
-                  color: "FF0000",
-                  size: 24,
-                  font: "Times New Roman",
-                }),
-              ],
               spacing: {
-                before: 200,
                 after: 400,
               },
             }),
-
-            // Tabela de Conteúdo
+            
+            // Tabela de conteúdo
             new Paragraph({
+              text: "ÍNDICE",
               heading: HeadingLevel.HEADING_1,
-              text: "SUMÁRIO",
-              alignment: AlignmentType.CENTER,
               style: "TOCHeading",
+              alignment: AlignmentType.CENTER,
+            }),
+            new TableOfContents("Sumário", {
+              hyperlink: true,
+              headingStyleRange: "1-3",
             }),
             
-            new TableOfContents("Sumário"),
-            
-            // Quebra de página após a tabela de conteúdo
+            // Quebra de página após o índice
             new Paragraph({
-              text: "",
               pageBreakBefore: true,
             }),
-
-            // Informações Básicas
+            
+            // Informações do cliente
             new Paragraph({
-              heading: HeadingLevel.HEADING_2,
-              children: [
-                new TextRun({
-                  text: "1. INFORMAÇÕES BÁSICAS",
-                  bold: true,
-                }),
-              ],
+              text: "1. INFORMAÇÕES DO CLIENTE",
+              heading: HeadingLevel.HEADING_1,
+              alignment: AlignmentType.LEFT,
             }),
-
             this.createClientInfoTable(inspection),
-
-            // Informações da Equipe
+            
+            // Equipe técnica
             new Paragraph({
-              heading: HeadingLevel.HEADING_2,
-              children: [
-                new TextRun({
-                  text: "2. INFORMAÇÕES DA EQUIPE",
-                  bold: true,
-                }),
-              ],
+              text: "2. EQUIPE TÉCNICA",
+              heading: HeadingLevel.HEADING_1,
+              alignment: AlignmentType.LEFT,
             }),
-
             this.createTeamInfoTable(inspection),
-
-            // Informações das Telhas
+            
+            // Informações da cobertura
             new Paragraph({
-              heading: HeadingLevel.HEADING_2,
-              children: [
-                new TextRun({
-                  text: "3. INFORMAÇÕES DAS TELHAS",
-                  bold: true,
-                }),
-              ],
+              text: "3. INFORMAÇÕES DA COBERTURA",
+              heading: HeadingLevel.HEADING_1,
+              alignment: AlignmentType.LEFT,
             }),
-
             this.createRoofTilesTable(inspection),
-
-            // Não Conformidades
+            
+            // Não conformidades
             new Paragraph({
-              heading: HeadingLevel.HEADING_2,
-              children: [
-                new TextRun({
-                  text: "4. NÃO CONFORMIDADES IDENTIFICADAS",
-                  bold: true,
-                }),
-              ],
+              text: "4. NÃO CONFORMIDADES IDENTIFICADAS",
+              heading: HeadingLevel.HEADING_1,
+              alignment: AlignmentType.LEFT,
             }),
-
-            ...this.createNonConformitiesSection(inspection),
-
-            // Registro Fotográfico
+            ...nonConformitiesSections,
+            
+            // Comentários adicionais
             new Paragraph({
-              heading: HeadingLevel.HEADING_2,
-              children: [
-                new TextRun({
-                  text: "5. REGISTRO FOTOGRÁFICO",
-                  bold: true,
-                }),
-              ],
+              text: "5. COMENTÁRIOS ADICIONAIS",
+              heading: HeadingLevel.HEADING_1,
+              alignment: AlignmentType.LEFT,
             }),
-
-            // Aqui seriam incluídas as fotos, mas como isso depende de conversão de imagens
-            // isso será implementado posteriormente
             new Paragraph({
-              children: [
-                new TextRun({
-                  text: "As fotos registradas durante a inspeção estão disponíveis no aplicativo.",
-                  italics: true,
-                }),
-              ],
+              text: inspection.comments || "Nenhum comentário adicional.",
+              alignment: AlignmentType.LEFT,
             }),
-
-            // Conclusão
-            new Paragraph({
-              heading: HeadingLevel.HEADING_2,
-              children: [
-                new TextRun({
-                  text: "6. CONCLUSÃO",
-                  bold: true,
-                }),
-              ],
-            }),
-
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: "Após análise técnica detalhada, foi constatado que as não conformidades " +
-                    "identificadas não estão em conformidade com as especificações técnicas da " +
-                    "Brasilit. Portanto, o resultado da análise é IMPROCEDENTE.",
-                }),
-              ],
-            }),
-
-            // Observações Finais
-            ...(inspection.comments ? 
-            [
-              new Paragraph({
-                heading: HeadingLevel.HEADING_2,
-                children: [
-                  new TextRun({
-                    text: "7. OBSERVAÇÕES FINAIS",
-                    bold: true,
-                  }),
-                ],
-              }),
-              
-              new Paragraph({
-                children: [
-                  new TextRun({
-                    text: inspection.comments,
-                  }),
-                ],
-              }),
-            ] : []),
           ],
         },
       ],
     });
-    console.timeEnd('createDocument');
 
-    // Gerar documento com nome padronizado
+    console.timeEnd('createDocument');
     console.time('packDocument');
     const blob = await Packer.toBlob(doc);
     console.timeEnd('packDocument');
@@ -874,7 +802,7 @@ export class ReportGenerator {
    * @param inspection - Dados da inspeção
    * @returns Array de parágrafos
    */
-  private static createNonConformitiesSection(inspection: Inspection): Paragraph[] {
+  private static async createNonConformitiesSection(inspection: Inspection): Promise<Paragraph[]> {
     const { nonConformities, photos } = inspection;
     const selectedNonConformities = nonConformities.filter(nc => nc.selected);
     
@@ -893,7 +821,7 @@ export class ReportGenerator {
     
     const paragraphs: Paragraph[] = [];
     
-    selectedNonConformities.forEach((nc, index) => {
+    for (const [index, nc] of selectedNonConformities.entries()) {
       paragraphs.push(
         new Paragraph({
           children: [
@@ -966,57 +894,67 @@ export class ReportGenerator {
         
         // Se houver fotos, adicionar cada uma delas
         if (ncPhotos.length > 0) {
-          ncPhotos.forEach((photo, photoIndex) => {
+          for (const [photoIndex, photo] of ncPhotos.entries()) {
             try {
-              // Adicionar a imagem
+              // Adicionar a legenda da foto
+              paragraphs.push(
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: `Foto ${index + 1}.${photoIndex + 1}: `,
+                      bold: true,
+                    }),
+                    new TextRun({
+                      text: photo.caption || 'Sem descrição',
+                    }),
+                  ],
+                  spacing: {
+                    before: 80,
+                    after: 40,
+                  },
+                })
+              );
+              
+              // Adicionar a imagem se a URL for válida
               if (photo.url && photo.url.trim() !== '') {
-                paragraphs.push(
-                  new Paragraph({
-                    children: [
-                      new TextRun({
-                        text: `Foto ${index + 1}.${photoIndex + 1}: `,
-                        bold: true,
-                      }),
-                      new TextRun({
-                        text: photo.caption || 'Sem descrição',
-                      }),
-                    ],
-                    spacing: {
-                      before: 80,
-                      after: 40,
-                    },
-                  })
-                );
+                const imageBuffer = await this.convertImageUrlToBuffer(photo.url);
                 
-                // Adicionar a imagem se a URL for válida
-                // Note: Para imagens da web, é necessário convertê-las para base64 ou blob
-                // Este é um exemplo simplificado que assume que as URLs são válidas
-                // Como não podemos usar URLs diretamente, vamos adicionar um placeholder
-                paragraphs.push(
-                  new Paragraph({
-                    children: [
-                      new TextRun({
-                        text: `[Imagem: ${photo.caption || 'Sem descrição'}]`,
-                        italics: true,
-                      }),
-                    ],
-                    spacing: {
-                      after: 120,
-                    },
-                    alignment: AlignmentType.CENTER,
-                  })
-                );
-                
-                // Nota: Para implementar corretamente a inclusão de imagens,
-                // seria necessário:
-                // 1. Converter a URL em um array de bytes (usando fetch)
-                // 2. Usar esse array como fonte da imagem
-                // Exemplo:
-                // const response = await fetch(photo.url);
-                // const blob = await response.blob();
-                // const arrayBuffer = await blob.arrayBuffer();
-                // const buffer = Buffer.from(arrayBuffer);
-                // new ImageRun({ data: buffer, transformation: { width: 400, height: 300 } })
+                if (imageBuffer.length > 0) {
+                  paragraphs.push(
+                    new Paragraph({
+                      children: [
+                        new ImageRun({
+                          data: imageBuffer,
+                          transformation: {
+                            width: 400,
+                            height: 300,
+                          },
+                          type: "png",
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                      spacing: {
+                        after: 120,
+                      },
+                    })
+                  );
+                } else {
+                  // Fallback se não conseguir carregar a imagem
+                  paragraphs.push(
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          text: `[Não foi possível carregar a imagem: ${photo.caption || 'Sem descrição'}]`,
+                          italics: true,
+                          color: "FF0000",
+                        }),
+                      ],
+                      spacing: {
+                        after: 120,
+                      },
+                    })
+                  );
+                }
               }
             } catch (error) {
               console.error(`Erro ao adicionar imagem: ${error}`);
@@ -1036,7 +974,7 @@ export class ReportGenerator {
                 })
               );
             }
-          });
+          }
         } else {
           // Se não houver fotos, adicionar mensagem
           paragraphs.push(
@@ -1054,8 +992,82 @@ export class ReportGenerator {
           );
         }
       }
-    });
+    }
     
     return paragraphs;
+  }
+
+  /**
+   * Obtém os dados do logo da BRASILIT
+   * @returns Buffer com os dados da imagem
+   */
+  private static getLogoData(): Buffer {
+    // Carregará o logo a partir de um Buffer (dados binários)
+    // Por enquanto, retorna um buffer vazio (ajustar posteriormente com dados reais)
+    return Buffer.from(BRASILIT_LOGO_BASE64, 'base64');
+  }
+  
+  /**
+   * Converte uma URL de imagem em um Buffer
+   * @param photoUrl URL da imagem a ser convertida
+   * @returns Promise com o Buffer da imagem
+   */
+  private static async convertImageUrlToBuffer(photoUrl: string): Promise<Buffer> {
+    try {
+      const response = await fetch(photoUrl);
+      const arrayBuffer = await response.arrayBuffer();
+      return Buffer.from(arrayBuffer);
+    } catch (error) {
+      console.error('Erro ao converter imagem:', error);
+      // Retorna um buffer vazio em caso de erro
+      return Buffer.from([]);
+    }
+  }
+  
+  /**
+   * Cria parágrafo com imagem a partir da URL
+   * @param photoUrl URL da imagem
+   * @param caption Legenda da imagem
+   * @returns Promise com o Paragraph contendo a imagem
+   */
+  private static async createImageParagraph(photoUrl: string, caption?: string): Promise<Paragraph[]> {
+    try {
+      const buffer = await this.convertImageUrlToBuffer(photoUrl);
+      
+      if (buffer.length === 0) {
+        return [new Paragraph({ text: "[Erro ao carregar imagem]" })];
+      }
+      
+      const paragraphs = [
+        new Paragraph({
+          children: [
+            new ImageRun({
+              data: buffer,
+              transformation: {
+                width: 400,
+                height: 300,
+              },
+              type: "png",
+            }),
+          ],
+          alignment: AlignmentType.CENTER,
+        }),
+      ];
+      
+      if (caption) {
+        paragraphs.push(
+          new Paragraph({
+            text: caption,
+            alignment: AlignmentType.CENTER,
+            style: "Normal",
+          })
+        );
+      }
+      
+      return paragraphs;
+    } catch (error) {
+      console.error('Erro ao criar parágrafo com imagem:', error);
+      return [new Paragraph({ text: "[Erro ao processar imagem]" })];
+    }
   }
 } 
