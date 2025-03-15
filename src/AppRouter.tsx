@@ -10,6 +10,7 @@ import { useProfile } from './hooks/useProfile';
 import Dashboard from './pages/Dashboard';
 import OfflineMode from './pages/OfflineMode';
 import Login from './pages/Login';
+import NewInspection from './pages/NewInspection';
 
 // Componentes
 import Layout from './components/layout/Layout';
@@ -100,7 +101,7 @@ const AppRouter: React.FC = () => {
         <Route path="/inspections/new" element={
           <ProtectedRoute>
             <Layout>
-              <div>Nova Vistoria</div>
+              <NewInspection />
             </Layout>
           </ProtectedRoute>
         } />
