@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import ProgressBar from '../../components/ui/ProgressBar';
 import StatusBadge from '../../components/ui/StatusBadge';
+import { ReportGenerator } from '../../lib/report-generator';
 
 const ReviewAndFinalize: React.FC = () => {
   const navigate = useNavigate();
@@ -23,22 +24,111 @@ const ReviewAndFinalize: React.FC = () => {
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const [reportGenerated, setReportGenerated] = useState(false);
 
-  const handleGenerateReport = () => {
+  const handleGenerateReport = async () => {
     setIsGeneratingReport(true);
 
-    // Simulate report generation
-    setTimeout(() => {
-      setIsGeneratingReport(false);
+    try {
+      // Simulação de dados da inspeção para o relatório
+      // Em produção, estes dados viriam do estado global da aplicação ou de uma API
+      const inspectionData = {
+        // Informações Básicas
+        id: 'INS-' + Math.floor(Math.random() * 10000),
+        date: '15/03/2025',
+        client: {
+          id: 'CLI-123',
+          name: 'Condomínio Residencial Vila Nova',
+          project: 'Residencial',
+          city: 'São Paulo',
+          state: 'PR',
+          address: 'Rua das Acácias, 123',
+          protocol: 'FAR-2025-00123',
+          subject: 'Vistoria Técnica para Avaliação de Telhado',
+        },
+        
+        // Informações da Equipe
+        teamInfo: {
+          technician: 'João Silva',
+          department: 'Assistência Técnica',
+          unit: 'PR',
+          coordinator: 'Marlon Weingartner',
+          manager: 'Elisabete Kudo',
+          region: 'Sul',
+        },
+        
+        // Seleção de Telhas
+        roofTiles: [
+          {
+            id: '1',
+            type: 'Telha Francesa',
+            area: 10,
+            quantity: 5,
+          },
+          {
+            id: '2',
+            type: 'Telha Romana',
+            area: 15,
+            quantity: 3,
+          },
+        ],
+        
+        // Não Conformidades
+        nonConformities: [
+          {
+            id: 1,
+            title: 'Armazenagem Incorreta',
+            description: 'Telhas estocadas em local inadequado, sem proteção contra intempéries.',
+            selected: true,
+            notes: 'Telhas expostas à chuva por período prolongado.',
+            photos: [],
+          },
+          {
+            id: 2,
+            title: 'Inclinação Inadequada',
+            description: 'Telhado com inclinação abaixo do mínimo recomendado pelo fabricante.',
+            selected: true,
+            photos: [],
+          },
+        ],
+        
+        // Fotos
+        photos: [
+          {
+            id: 'p1',
+            url: '',
+            caption: 'Vista geral do telhado',
+            category: 'overview',
+          },
+          {
+            id: 'p2',
+            url: '',
+            caption: 'Detalhe da armazenagem incorreta',
+            category: 'nonconformity',
+          },
+        ],
+        
+        // Comentários Finais
+        comments: finalComments,
+      };
+
+      // Gerar relatório DOCX usando o serviço implementado
+      await ReportGenerator.saveReport(inspectionData);
+      
       setReportGenerated(true);
-    }, 2000);
+    } catch (error) {
+      console.error('Erro ao gerar relatório:', error);
+      alert('Ocorreu um erro ao gerar o relatório. Por favor, tente novamente.');
+    } finally {
+      setIsGeneratingReport(false);
+    }
   };
 
   const handleEmailReport = () => {
-    alert('Relatório enviado por e-mail com sucesso!');
+    alert('Funcionalidade de envio por e-mail será implementada em versão futura.');
   };
 
-  const handleDownloadReport = () => {
-    alert('Iniciando download do relatório...');
+  const handleDownloadReport = async () => {
+    // Reutiliza a função de gerar relatório
+    await handleGenerateReport();
   };
 
   const inspectionSteps = [
