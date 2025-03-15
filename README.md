@@ -86,4 +86,22 @@ Para mais informações sobre a sintaxe de templates, consulte a [documentação
 
 ## Deployment
 
-O projeto está configurado para deploy na plataforma Vercel, integrado com GitHub para CI/CD. 
+O projeto está configurado para deploy na plataforma Vercel, integrado com GitHub para CI/CD.
+
+# Projeto Bolt
+
+Aplicativo para gerenciamento de vistorias técnicas.
+
+## Recursos Principais
+
+- Gerenciamento de vistorias técnicas
+- Suporte a modo offline com sincronização automática
+- Geração de relatórios em PDF com suporte a imagens
+- Interface responsiva e intuitiva
+
+## Atualizações Recentes
+
+- Adicionado o componente NewInspection para criar novas vistorias
+- Corrigido problema de importação dinâmica de módulos
+- Implementado suporte para modo offline
+- Melhorado gerador de relatórios com suporte a imagens 
