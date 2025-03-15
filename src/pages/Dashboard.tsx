@@ -351,13 +351,13 @@ const Dashboard: React.FC = () => {
               <FileText className="h-6 w-6 mb-1 text-gray-500" />
               <span className="text-sm font-medium">Relatórios</span>
             </Link>
-            <button
+            <Link
+              to="/sincronizar"
               className="bg-white text-gray-700 text-center py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm flex flex-col items-center justify-center"
-              onClick={() => console.log('Sincronizar dados')}
             >
               <RefreshCw className="h-6 w-6 mb-1 text-gray-500" />
               <span className="text-sm font-medium">Sincronizar</span>
-            </button>
+            </Link>
           </div>
         </div>
 

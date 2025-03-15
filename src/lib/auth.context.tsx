@@ -64,13 +64,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setError(null);
       setLoading(true);
 
+      // Validar dados de entrada
+      if (!email || !password) {
+        const errorMessage = 'Email e senha são obrigatórios';
+        setError(errorMessage);
+        throw new Error(errorMessage);
+      }
+
       console.log('Chamando supabase.auth.signInWithPassword');
       const response = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      console.log('Resposta completa do Supabase:', JSON.stringify(response));
+      console.log('Resposta do Supabase recebida');
       const { data, error } = response;
 
       if (error) {
@@ -97,21 +104,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           errorMessage = error.message;
         }
 
+        console.error('Erro de login mapeado:', errorMessage);
         setError(errorMessage);
         throw new Error(errorMessage);
       } else {
-        console.log('Login bem-sucedido! User:', data.user);
+        console.log('Login bem-sucedido! User:', data.user?.id);
+        // Garantir que a sessão tenha sido definida
+        if (!data.session) {
+          console.error('Login aparentemente bem-sucedido, mas sem sessão');
+          const errorMessage = 'Erro interno: sessão não iniciada corretamente';
+          setError(errorMessage);
+          throw new Error(errorMessage);
+        }
       }
     } catch (err) {
       // Este catch só tratará erros que não foram tratados acima
-      let errorMessage = 'Erro ao fazer login';
+      const errorMessage = 'Erro ao fazer login';
 
       if (err instanceof Error) {
-        console.error('Erro de login completo:', err);
-        errorMessage = err.message;
+        console.error('Erro detalhado:', err);
+        // Apenas sobrescrever se não for um erro já tratado
+        if (!error) {
+          setError(err.message);
+        }
+      } else {
+        console.error('Erro desconhecido durante login:', err);
+        setError(errorMessage);
       }
-
-      setError(errorMessage);
+      throw err; // Propagar o erro para que o componente possa tratá-lo
     } finally {
       setLoading(false);
     }

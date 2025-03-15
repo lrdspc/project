@@ -2,6 +2,9 @@
  * Serviço responsável pela geração de relatórios em formato DOCX
  * baseado nos dados coletados durante a inspeção.
  */
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { saveAs } from 'file-saver';
 import {
   Document,
   Paragraph,
@@ -15,10 +18,9 @@ import {
   Header,
   Footer,
   Packer,
+  ImageRun,
+  TableOfContents
 } from 'docx';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { saveAs } from 'file-saver';
 
 // Tipos de dados para a inspeção
 interface Client {
@@ -75,6 +77,22 @@ interface Inspection {
   comments?: string;
 }
 
+// Constantes para substituir as importações do assets.ts
+const BRASILIT_LOGO_BASE64 = ""; // Placeholder - será substituído por uma URL de imagem real
+const COMPANY_CONTACT_INFO = {
+  name: "Brasilit - Saint-Gobain",
+  address: "Av. Santa Marina, 482",
+  city: "São Paulo - SP",
+  phone: "(11) 2246-7000",
+  website: "www.brasilit.com.br",
+  email: "contato@brasilit.com.br"
+};
+
+/**
+ * Classe responsável pela geração de relatórios em formato DOCX
+ * Implementa todas as funcionalidades necessárias para criar relatórios
+ * formatados conforme as especificações da BRASILIT.
+ */
 export class ReportGenerator {
   /**
    * Gera um documento DOCX a partir dos dados de inspeção
@@ -82,6 +100,7 @@ export class ReportGenerator {
    * @returns Promise com o Blob do documento gerado
    */
   public static async generateReport(inspection: Inspection): Promise<Blob> {
+    console.time('createDocument');
     const doc = new Document({
       creator: inspection.teamInfo?.technician || "Técnico Brasilit",
       title: `Relatório de Inspeção - ${inspection.client.name}`,
@@ -89,12 +108,26 @@ export class ReportGenerator {
       styles: {
         paragraphStyles: [
           {
+            id: "Normal",
+            name: "Normal",
+            run: {
+              font: "Times New Roman",
+              size: 24, // 12pt
+            },
+            paragraph: {
+              spacing: {
+                line: 360, // 1.5 line spacing
+              },
+            },
+          },
+          {
             id: "Heading1",
             name: "Heading 1",
             basedOn: "Normal",
             next: "Normal",
             quickFormat: true,
             run: {
+              font: "Times New Roman",
               size: 28,
               bold: true,
               color: "000000",
@@ -112,6 +145,7 @@ export class ReportGenerator {
             next: "Normal",
             quickFormat: true,
             run: {
+              font: "Times New Roman",
               size: 24,
               bold: true,
               color: "000000",
@@ -132,6 +166,36 @@ export class ReportGenerator {
               bold: true,
               color: "FFFFFF",
               size: 22,
+              font: "Times New Roman",
+            },
+          },
+          {
+            id: "TOC",
+            name: "TOC",
+            basedOn: "Normal",
+            next: "Normal",
+            quickFormat: true,
+            run: {
+              font: "Times New Roman",
+              size: 24,
+            },
+          },
+          {
+            id: "TOCHeading",
+            name: "TOC Heading",
+            basedOn: "Normal",
+            next: "Normal",
+            quickFormat: true,
+            run: {
+              font: "Times New Roman",
+              size: 28,
+              bold: true,
+            },
+            paragraph: {
+              spacing: {
+                before: 240,
+                after: 120,
+              },
             },
           },
         ],
@@ -154,10 +218,13 @@ export class ReportGenerator {
                 new Paragraph({
                   alignment: AlignmentType.RIGHT,
                   children: [
-                    new TextRun({
-                      text: "BRASILIT - SAINT-GOBAIN",
-                      bold: true,
-                      size: 20,
+                    new ImageRun({
+                      data: BRASILIT_LOGO_BASE64,
+                      transformation: {
+                        width: 120,
+                        height: 50,
+                      },
+                      type: 'png'
                     }),
                   ],
                 }),
@@ -171,9 +238,41 @@ export class ReportGenerator {
                   alignment: AlignmentType.CENTER,
                   children: [
                     new TextRun({
+                      text: COMPANY_CONTACT_INFO.name,
+                      bold: true,
+                      size: 18,
+                      font: "Times New Roman",
+                    }),
+                  ],
+                }),
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [
+                    new TextRun({
+                      text: `${COMPANY_CONTACT_INFO.address}, ${COMPANY_CONTACT_INFO.city}`,
+                      size: 16,
+                      font: "Times New Roman",
+                    }),
+                  ],
+                }),
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [
+                    new TextRun({
+                      text: `Tel: ${COMPANY_CONTACT_INFO.phone} | ${COMPANY_CONTACT_INFO.website} | ${COMPANY_CONTACT_INFO.email}`,
+                      size: 16,
+                      font: "Times New Roman",
+                    }),
+                  ],
+                }),
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [
+                    new TextRun({
                       text: "Relatório gerado em " + 
                         format(new Date(), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR }),
-                      size: 18,
+                      size: 16,
+                      font: "Times New Roman",
                     }),
                   ],
                 }),
@@ -190,6 +289,7 @@ export class ReportGenerator {
                   text: "RELATÓRIO DE INSPEÇÃO TÉCNICA",
                   bold: true,
                   size: 32,
+                  font: "Times New Roman",
                 }),
               ],
             }),
@@ -202,18 +302,36 @@ export class ReportGenerator {
                   text: "RESULTADO DA ANÁLISE: ",
                   bold: true,
                   size: 24,
+                  font: "Times New Roman",
                 }),
                 new TextRun({
                   text: "IMPROCEDENTE",
                   bold: true,
                   color: "FF0000",
                   size: 24,
+                  font: "Times New Roman",
                 }),
               ],
               spacing: {
                 before: 200,
                 after: 400,
               },
+            }),
+
+            // Tabela de Conteúdo
+            new Paragraph({
+              heading: HeadingLevel.HEADING_1,
+              text: "SUMÁRIO",
+              alignment: AlignmentType.CENTER,
+              style: "TOCHeading",
+            }),
+            
+            new TableOfContents("Sumário"),
+            
+            // Quebra de página após a tabela de conteúdo
+            new Paragraph({
+              text: "",
+              pageBreakBefore: true,
             }),
 
             // Informações Básicas
@@ -336,9 +454,13 @@ export class ReportGenerator {
         },
       ],
     });
+    console.timeEnd('createDocument');
 
     // Gerar documento com nome padronizado
-    return await Packer.toBlob(doc);
+    console.time('packDocument');
+    const blob = await Packer.toBlob(doc);
+    console.timeEnd('packDocument');
+    return blob;
   }
   
   /**
@@ -753,7 +875,7 @@ export class ReportGenerator {
    * @returns Array de parágrafos
    */
   private static createNonConformitiesSection(inspection: Inspection): Paragraph[] {
-    const { nonConformities } = inspection;
+    const { nonConformities, photos } = inspection;
     const selectedNonConformities = nonConformities.filter(nc => nc.selected);
     
     if (selectedNonConformities.length === 0) {
@@ -819,8 +941,119 @@ export class ReportGenerator {
         );
       }
       
-      // Aqui seriam incluídas as fotos dessa não conformidade,
-      // mas isso será implementado posteriormente
+      // Adicionar fotos relacionadas a esta não conformidade
+      if (nc.photos && nc.photos.length > 0) {
+        // Adicionar título para a seção de fotos
+        paragraphs.push(
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: "Evidências fotográficas:",
+                bold: true,
+              }),
+            ],
+            spacing: {
+              before: 120,
+              after: 80,
+            },
+          })
+        );
+        
+        // Encontrar as fotos correspondentes
+        const ncPhotos = nc.photos
+          .map(photoId => photos.find(p => p.id === photoId))
+          .filter(photo => photo !== undefined) as Photo[];
+        
+        // Se houver fotos, adicionar cada uma delas
+        if (ncPhotos.length > 0) {
+          ncPhotos.forEach((photo, photoIndex) => {
+            try {
+              // Adicionar a imagem
+              if (photo.url && photo.url.trim() !== '') {
+                paragraphs.push(
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: `Foto ${index + 1}.${photoIndex + 1}: `,
+                        bold: true,
+                      }),
+                      new TextRun({
+                        text: photo.caption || 'Sem descrição',
+                      }),
+                    ],
+                    spacing: {
+                      before: 80,
+                      after: 40,
+                    },
+                  })
+                );
+                
+                // Adicionar a imagem se a URL for válida
+                // Note: Para imagens da web, é necessário convertê-las para base64 ou blob
+                // Este é um exemplo simplificado que assume que as URLs são válidas
+                // Como não podemos usar URLs diretamente, vamos adicionar um placeholder
+                paragraphs.push(
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: `[Imagem: ${photo.caption || 'Sem descrição'}]`,
+                        italics: true,
+                      }),
+                    ],
+                    spacing: {
+                      after: 120,
+                    },
+                    alignment: AlignmentType.CENTER,
+                  })
+                );
+                
+                // Nota: Para implementar corretamente a inclusão de imagens,
+                // seria necessário:
+                // 1. Converter a URL em um array de bytes (usando fetch)
+                // 2. Usar esse array como fonte da imagem
+                // Exemplo:
+                // const response = await fetch(photo.url);
+                // const blob = await response.blob();
+                // const arrayBuffer = await blob.arrayBuffer();
+                // const buffer = Buffer.from(arrayBuffer);
+                // new ImageRun({ data: buffer, transformation: { width: 400, height: 300 } })
+              }
+            } catch (error) {
+              console.error(`Erro ao adicionar imagem: ${error}`);
+              // Adicionar mensagem de erro no documento
+              paragraphs.push(
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: `[Não foi possível carregar a imagem: ${photo.caption || 'Sem descrição'}]`,
+                      italics: true,
+                      color: "FF0000",
+                    }),
+                  ],
+                  spacing: {
+                    after: 120,
+                  },
+                })
+              );
+            }
+          });
+        } else {
+          // Se não houver fotos, adicionar mensagem
+          paragraphs.push(
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "Nenhuma imagem disponível para esta não conformidade.",
+                  italics: true,
+                }),
+              ],
+              spacing: {
+                after: 120,
+              },
+            })
+          );
+        }
+      }
     });
     
     return paragraphs;

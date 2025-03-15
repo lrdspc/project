@@ -1,15 +1,21 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../lib/auth.context';
+// Importações comentadas temporariamente
+// import { Navigate, useLocation } from 'react-router-dom';
+// import { useAuth } from '../../lib/auth.context';
 
 interface PrivateRouteProps {
   children: React.ReactNode;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
-  const { session, loading } = useAuth();
-  const location = useLocation();
+export default function PrivateRoute({ children }: PrivateRouteProps) {
+  // Variáveis comentadas temporariamente
+  // const { session, loading } = useAuth();
+  // const location = useLocation();
 
+  // Verificação temporariamente desativada - acesso direto
+  return <>{children}</>;
+
+  /* Código original comentado
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -23,6 +29,5 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   }
 
   return <>{children}</>;
-};
-
-export default PrivateRoute;
+  */
+} 

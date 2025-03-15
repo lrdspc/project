@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import {
   ChevronLeft,
   CheckCircle,
@@ -16,16 +16,89 @@ import {
 } from 'lucide-react';
 import ProgressBar from '../../components/ui/ProgressBar';
 import StatusBadge from '../../components/ui/StatusBadge';
-import { ReportGenerator } from '../../lib/report-generator';
 
 const ReviewAndFinalize: React.FC = () => {
-  const navigate = useNavigate();
   const [finalComments, setFinalComments] = useState('');
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const [reportGenerated, setReportGenerated] = useState(false);
+  const [progressMessage, setProgressMessage] = useState('');
+  const [progressValue, setProgressValue] = useState(0);
+  const workerRef = useRef<Worker | null>(null);
+
+  // Inicializar o worker quando o componente for montado
+  useEffect(() => {
+    // Verificar se Web Workers são suportados
+    if (typeof Worker !== 'undefined') {
+      // Criar o worker - usando o novo worker baseado em Docxtemplater
+      workerRef.current = new Worker('/src/workers/template-report-worker.js');
+      
+      // Configurar o listener para mensagens do worker
+      workerRef.current.onmessage = (event) => {
+        const { type, message, progress, blob, fileName } = event.data;
+        
+        switch (type) {
+          case 'ready': {
+            console.log('Worker pronto para uso');
+            break;
+          }
+            
+          case 'progress': {
+            setProgressMessage(message);
+            setProgressValue(progress);
+            break;
+          }
+            
+          case 'complete': {
+            setIsGeneratingReport(false);
+            setReportGenerated(true);
+            // Salvar o arquivo
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            break;
+          }
+            
+          case 'error': {
+            setIsGeneratingReport(false);
+            console.error('Erro no worker:', message);
+            alert(`Erro ao gerar relatório: ${message}`);
+            break;
+          }
+          
+          default: {
+            console.warn(`Tipo de mensagem desconhecido: ${type}`);
+          }
+        }
+      };
+      
+      // Configurar o listener para erros do worker
+      workerRef.current.onerror = (error) => {
+        console.error('Erro no worker:', error);
+        setIsGeneratingReport(false);
+        alert('Ocorreu um erro ao gerar o relatório. Por favor, tente novamente.');
+      };
+    } else {
+      console.warn('Web Workers não são suportados neste navegador');
+    }
+    
+    // Limpar o worker quando o componente for desmontado
+    return () => {
+      if (workerRef.current) {
+        workerRef.current.terminate();
+        workerRef.current = null;
+      }
+    };
+  }, []);
 
   const handleGenerateReport = async () => {
     setIsGeneratingReport(true);
+    setProgressValue(0);
+    setProgressMessage('Preparando dados...');
 
     try {
       // Simulação de dados da inspeção para o relatório
@@ -110,15 +183,20 @@ const ReviewAndFinalize: React.FC = () => {
         comments: finalComments,
       };
 
-      // Gerar relatório DOCX usando o serviço implementado
-      await ReportGenerator.saveReport(inspectionData);
-      
-      setReportGenerated(true);
+      // Verificar se o worker está disponível
+      if (workerRef.current) {
+        // Enviar dados para o worker processar
+        workerRef.current.postMessage({ 
+          type: 'generate', 
+          data: inspectionData 
+        });
+      } else {
+        throw new Error('Worker não está disponível');
+      }
     } catch (error) {
-      console.error('Erro ao gerar relatório:', error);
-      alert('Ocorreu um erro ao gerar o relatório. Por favor, tente novamente.');
-    } finally {
+      console.error('Erro ao iniciar geração do relatório:', error);
       setIsGeneratingReport(false);
+      alert('Ocorreu um erro ao gerar o relatório. Por favor, tente novamente.');
     }
   };
 
@@ -523,8 +601,24 @@ const ReviewAndFinalize: React.FC = () => {
               </div>
             </div>
 
+            {/* Barra de progresso para geração de relatório */}
+            {isGeneratingReport && (
+              <div className="mt-4 bg-white p-4 rounded-lg shadow">
+                <h3 className="text-sm font-medium text-gray-700 mb-2">
+                  Gerando Relatório
+                </h3>
+                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                  <div 
+                    className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" 
+                    style={{ width: `${progressValue}%` }}
+                  ></div>
+                </div>
+                <p className="text-sm text-gray-500 mt-2">{progressMessage}</p>
+              </div>
+            )}
+
             {/* Action Buttons */}
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-6">
               <Link
                 to="/registro-fotografico"
                 className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"

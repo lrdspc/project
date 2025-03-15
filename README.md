@@ -24,12 +24,15 @@ src/
 ├── lib/                # Bibliotecas e utilitários
 │   ├── auth.context.tsx # Contexto de autenticação
 │   ├── database.types.ts # Tipos do banco de dados
-│   └── supabase.ts     # Cliente Supabase
+│   ├── supabase.ts     # Cliente Supabase
+│   └── template-report-generator.ts # Gerador de relatórios baseado em templates
 ├── pages/              # Páginas da aplicação
 │   ├── auth/           # Páginas de autenticação
 │   ├── Dashboard.tsx   # Página principal
 │   ├── Clients.tsx     # Página de clientes
 │   └── ...             # Outras páginas
+├── workers/            # Web Workers para processamento em segundo plano
+│   └── template-report-worker.js # Worker para geração de relatórios
 ├── App.tsx             # Componente principal da aplicação
 └── main.tsx            # Ponto de entrada da aplicação
 ```
@@ -47,6 +50,7 @@ src/
 - **Frontend**: React, TypeScript, TailwindCSS
 - **Backend**: Supabase (PostgreSQL, Autenticação, Storage)
 - **PWA**: Service Worker para funcionalidade offline
+- **Relatórios**: Docxtemplater e PizZip para geração de documentos DOCX
 
 ## Instalação e Execução
 
@@ -59,6 +63,26 @@ src/
    ```
    npm run dev
    ```
+
+## Criação de Templates para Relatórios
+
+O sistema utiliza Docxtemplater para geração de relatórios baseados em templates. Para criar um novo template:
+
+1. Crie um documento DOCX no Microsoft Word
+2. Utilize a sintaxe de placeholders do Docxtemplater: `{variavel}`
+3. Salve o arquivo como `report-template.docx` no diretório `public/templates/`
+
+### Variáveis disponíveis no template:
+
+- **Informações básicas**: `{reportId}`, `{reportDate}`, `{currentDate}`
+- **Cliente**: `{clientName}`, `{clientProject}`, `{clientAddress}`, etc.
+- **Equipe**: `{technicianName}`, `{department}`, `{unit}`, etc.
+- **Telhas**: Loop com `{#roofTiles}` ... `{/roofTiles}` contendo `{type}`, `{quantity}`, `{area}`, `{totalArea}`
+- **Não conformidades**: Loop com `{#nonConformities}` ... `{/nonConformities}` contendo `{title}`, `{description}`, `{notes}`
+- **Fotos**: Loops para `{#overviewPhotos}`, `{#nonconformityPhotos}` e `{#otherPhotos}`
+- **Comentários**: `{comments}`
+
+Para mais informações sobre a sintaxe de templates, consulte a [documentação do Docxtemplater](https://docxtemplater.com/docs/).
 
 ## Deployment
 

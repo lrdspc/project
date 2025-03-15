@@ -1,0 +1,13 @@
+{
+  "mainTask": "Implementação do PWA de Relatórios de Vistoria Brasilit",
+  "subtasks": [
+    "Melhorar o gerador de relatórios DOCX com suporte a imagens, logo, rodapé, tabela de conteúdo e formatação",
+    "Implementar funcionalidade offline completa com Dexie.js para armazenamento e sincronização",
+    "Desenvolver dashboard principal com seções Meu Dia, Próximas Vistorias e Relatórios Pendentes",
+    "Implementar sistema de agendamento e notificações",
+    "Adicionar funcionalidade de histórico de vistorias anteriores",
+    "Implementar navegação GPS e check-in com geolocalização",
+    "Desenvolver sistema de assinatura digital para conclusão da vistoria"
+  ],
+  "currentIndex": 0
+}

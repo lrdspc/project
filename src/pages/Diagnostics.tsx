@@ -6,6 +6,7 @@ import {
   Server,
   RefreshCw,
   XCircle,
+  Trash,
 } from 'lucide-react';
 
 interface ServiceWorkerStats {
@@ -95,6 +96,42 @@ const Diagnostics: React.FC = () => {
     }
   };
 
+  // Função para limpar o cache do PWA
+  const clearPWACache = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Limpar os caches
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(
+          cacheNames.map(cacheName => caches.delete(cacheName))
+        );
+        console.log('Todos os caches foram limpos');
+      }
+      
+      // Desregistrar service workers
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(
+          registrations.map(registration => registration.unregister())
+        );
+        console.log('Service workers desregistrados');
+      }
+      
+      // Exibir mensagem de sucesso
+      alert('Cache limpo com sucesso. A página será recarregada.');
+      
+      // Recarregar a página para aplicar as mudanças
+      window.location.reload();
+    } catch (error) {
+      console.error('Erro ao limpar cache:', error);
+      alert('Erro ao limpar cache. Veja o console para detalhes.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Carrega dados ao montar o componente
   useEffect(() => {
     fetchDiagnosticData();
@@ -135,18 +172,27 @@ const Diagnostics: React.FC = () => {
         <p className="text-gray-600">
           Estatísticas e diagnósticos da aplicação
         </p>
-        <button
-          onClick={fetchDiagnosticData}
-          disabled={isLoading}
-          className={`flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-            isLoading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
-          }`}
-        >
-          <RefreshCw
-            className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`}
-          />
-          Atualizar
-        </button>
+        <div className="flex space-x-2">
+          <button
+            onClick={clearPWACache}
+            className="flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700"
+          >
+            <Trash className="h-4 w-4 mr-2" />
+            Limpar Cache
+          </button>
+          <button
+            onClick={fetchDiagnosticData}
+            disabled={isLoading}
+            className={`flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
+              isLoading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
+            }`}
+          >
+            <RefreshCw
+              className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`}
+            />
+            Atualizar
+          </button>
+        </div>
       </div>
 
       {/* Status da integração MCP */}

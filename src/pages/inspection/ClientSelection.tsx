@@ -10,6 +10,11 @@ import {
   ChevronLeft,
 } from 'lucide-react';
 import ProgressBar from '../../components/ui/ProgressBar';
+import ClientModal from '../../components/clients/ClientModal';
+import type { Database } from '../../lib/database.types';
+
+// Definir o tipo InsertClient para uso com o ClientModal
+type InsertClient = Database['public']['Tables']['clients']['Insert'];
 
 // Mock data for clients
 const mockClients = [
@@ -58,6 +63,7 @@ const mockClients = [
 const ClientSelection: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredClients, setFilteredClients] = useState(mockClients);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,6 +99,28 @@ const ClientSelection: React.FC = () => {
     'Finalização',
   ];
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSaveClient = async (clientData: InsertClient) => {
+    try {
+      // Aqui você implementaria a lógica para salvar o cliente
+      console.log('Salvando cliente:', clientData);
+      
+      // Depois de salvar, você pode atualizar a lista de clientes
+      // e/ou selecionar o cliente recém-criado
+      
+      setIsModalOpen(false);
+    } catch (err) {
+      console.error('Erro ao salvar cliente:', err);
+    }
+  };
+
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-6">
       <div className="flex items-center mb-6">
@@ -124,13 +152,21 @@ const ClientSelection: React.FC = () => {
 
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-medium text-gray-900">Clientes</h2>
-            <Link
-              to="/novo-cliente"
-              className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <Plus className="h-4 w-4 mr-1" />
-              Novo Cliente
-            </Link>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => navigate('/informacoes-basicas')}
+                className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Pular Seleção
+              </button>
+              <button
+                onClick={handleOpenModal}
+                className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                Novo Cliente
+              </button>
+            </div>
           </div>
 
           <div className="space-y-3 mt-4">
@@ -176,7 +212,10 @@ const ClientSelection: React.FC = () => {
                 <p className="text-gray-500">
                   Nenhum cliente encontrado com os termos de busca.
                 </p>
-                <button className="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <button 
+                  onClick={handleOpenModal}
+                  className="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
                   <Plus className="mr-2 h-4 w-4" />
                   Cadastrar Novo Cliente
                 </button>
@@ -185,6 +224,15 @@ const ClientSelection: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal para cadastro de cliente */}
+      {isModalOpen && (
+        <ClientModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSave={handleSaveClient}
+        />
+      )}
     </div>
   );
 };
