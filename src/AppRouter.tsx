@@ -10,6 +10,10 @@ import { useProfile } from './hooks/useProfile';
 import Dashboard from './pages/Dashboard';
 import OfflineMode from './pages/OfflineMode';
 import Login from './pages/Login';
+/**
+ * Componente para nova vistoria - corrige problema de importação
+ * que causava erro "Failed to fetch dynamically imported module"
+ */
 import NewInspection from './pages/NewInspection';
 
 // Componentes
