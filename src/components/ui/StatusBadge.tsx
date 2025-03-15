@@ -7,10 +7,7 @@ interface StatusBadgeProps {
   text?: string;
 }
 
-const StatusBadge: React.FC<StatusBadgeProps> = ({ 
-  status, 
-  text 
-}) => {
+const StatusBadge: React.FC<StatusBadgeProps> = ({ status, text }) => {
   const getStatusStyles = (status: StatusType) => {
     switch (status) {
       case 'confirmed':
@@ -28,7 +25,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
 
   const getStatusText = (status: StatusType) => {
     if (text) return text;
-    
+
     switch (status) {
       case 'confirmed':
         return 'Confirmado';
@@ -44,7 +41,9 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
   };
 
   return (
-    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusStyles(status)}`}>
+    <span
+      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusStyles(status)}`}
+    >
       {getStatusText(status)}
     </span>
   );

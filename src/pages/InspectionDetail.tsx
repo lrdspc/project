@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { 
-  ArrowLeft, 
-  Building, 
-  Calendar, 
-  FileText, 
+import {
+  ArrowLeft,
+  Building,
+  Calendar,
+  FileText,
   Edit2,
-  Camera, 
-  Map, 
-  User, 
-  Phone, 
-  Mail, 
+  Camera,
+  Map,
+  User,
+  Phone,
+  Mail,
   AlertTriangle,
   Layers,
   Download,
-  Printer
+  Printer,
 } from 'lucide-react';
 import { useInspections } from '../hooks/useInspections';
 import { format } from 'date-fns';
@@ -84,7 +84,9 @@ const InspectionDetail: React.FC = () => {
   const navigate = useNavigate();
   const { getInspectionById, loading, error } = useInspections();
   const [inspection, setInspection] = useState<Inspection | null>(null);
-  const [activeTab, setActiveTab] = useState<'info' | 'tiles' | 'nonconformities' | 'photos'>('info');
+  const [activeTab, setActiveTab] = useState<
+    'info' | 'tiles' | 'nonconformities' | 'photos'
+  >('info');
 
   useEffect(() => {
     if (id) {
@@ -118,9 +120,7 @@ const InspectionDetail: React.FC = () => {
               <AlertTriangle className="h-5 w-5 text-red-500" />
             </div>
             <div className="ml-3">
-              <p className="text-sm text-red-700">
-                {error}
-              </p>
+              <p className="text-sm text-red-700">{error}</p>
             </div>
           </div>
         </div>
@@ -146,9 +146,7 @@ const InspectionDetail: React.FC = () => {
               <AlertTriangle className="h-5 w-5 text-yellow-500" />
             </div>
             <div className="ml-3">
-              <p className="text-sm text-yellow-700">
-                Vistoria não encontrada
-              </p>
+              <p className="text-sm text-yellow-700">Vistoria não encontrada</p>
             </div>
           </div>
         </div>
@@ -167,7 +165,9 @@ const InspectionDetail: React.FC = () => {
 
   const formatDate = (dateString: string) => {
     try {
-      return format(new Date(dateString), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+      return format(new Date(dateString), "dd 'de' MMMM 'de' yyyy", {
+        locale: ptBR,
+      });
     } catch {
       return dateString;
     }
@@ -190,20 +190,18 @@ const InspectionDetail: React.FC = () => {
             </h1>
           </div>
           <div className="flex space-x-3">
-            <button 
+            <button
               className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               onClick={() => window.print()}
             >
               <Printer className="h-4 w-4 mr-2" />
               Imprimir
             </button>
-            <button 
-              className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
-            >
+            <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
               <Download className="h-4 w-4 mr-2" />
               Exportar PDF
             </button>
-            <Link 
+            <Link
               to={`/editar-vistoria/${id}`}
               className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
             >
@@ -227,16 +225,23 @@ const InspectionDetail: React.FC = () => {
           </div>
           <div className="mt-2 flex items-center text-sm text-gray-500">
             <FileText className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-            Status: 
-            <span className={`ml-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-              inspection.status === 'completed' ? 'bg-green-100 text-green-800' : 
-              inspection.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' : 
-              'bg-gray-100 text-gray-800'
-            }`}>
-              {inspection.status === 'completed' ? 'Concluída' : 
-               inspection.status === 'in_progress' ? 'Em Andamento' : 
-               inspection.status === 'pending' ? 'Pendente' : 
-               inspection.status}
+            Status:
+            <span
+              className={`ml-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                inspection.status === 'completed'
+                  ? 'bg-green-100 text-green-800'
+                  : inspection.status === 'in_progress'
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : 'bg-gray-100 text-gray-800'
+              }`}
+            >
+              {inspection.status === 'completed'
+                ? 'Concluída'
+                : inspection.status === 'in_progress'
+                  ? 'Em Andamento'
+                  : inspection.status === 'pending'
+                    ? 'Pendente'
+                    : inspection.status}
             </span>
           </div>
         </div>
@@ -309,9 +314,13 @@ const InspectionDetail: React.FC = () => {
                   </dd>
                 </div>
                 <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Endereço</dt>
+                  <dt className="text-sm font-medium text-gray-500">
+                    Endereço
+                  </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {inspection.clients?.address || 'N/A'}, {inspection.clients?.city || 'N/A'} - {inspection.clients?.state || 'N/A'}
+                    {inspection.clients?.address || 'N/A'},{' '}
+                    {inspection.clients?.city || 'N/A'} -{' '}
+                    {inspection.clients?.state || 'N/A'}
                   </dd>
                 </div>
                 <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -332,37 +341,51 @@ const InspectionDetail: React.FC = () => {
                   </dd>
                 </div>
                 <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Data da Vistoria</dt>
+                  <dt className="text-sm font-medium text-gray-500">
+                    Data da Vistoria
+                  </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                     {formatDate(inspection.inspection_date)}
                   </dd>
                 </div>
                 <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Tipo de Edificação</dt>
+                  <dt className="text-sm font-medium text-gray-500">
+                    Tipo de Edificação
+                  </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                     {inspection.building_type || 'N/A'}
                   </dd>
                 </div>
                 <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Ano de Construção</dt>
+                  <dt className="text-sm font-medium text-gray-500">
+                    Ano de Construção
+                  </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                     {inspection.construction_year || 'N/A'}
                   </dd>
                 </div>
                 <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Área do Telhado</dt>
+                  <dt className="text-sm font-medium text-gray-500">
+                    Área do Telhado
+                  </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                     {inspection.roof_area} m²
                   </dd>
                 </div>
                 <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Última Manutenção</dt>
+                  <dt className="text-sm font-medium text-gray-500">
+                    Última Manutenção
+                  </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {inspection.last_maintenance ? formatDate(inspection.last_maintenance) : 'Não informado'}
+                    {inspection.last_maintenance
+                      ? formatDate(inspection.last_maintenance)
+                      : 'Não informado'}
                   </dd>
                 </div>
                 <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Principal Problema</dt>
+                  <dt className="text-sm font-medium text-gray-500">
+                    Principal Problema
+                  </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                     {inspection.main_issue || 'Não informado'}
                   </dd>
@@ -383,24 +406,40 @@ const InspectionDetail: React.FC = () => {
               </p>
             </div>
             <div className="border-t border-gray-200">
-              {inspection.inspection_tiles && inspection.inspection_tiles.length > 0 ? (
+              {inspection.inspection_tiles &&
+              inspection.inspection_tiles.length > 0 ? (
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
                           Linha
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
                           Espessura
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
                           Dimensões
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
                           Quantidade
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
                           Área (m²)
                         </th>
                       </tr>
@@ -451,7 +490,8 @@ const InspectionDetail: React.FC = () => {
               </p>
             </div>
             <div className="border-t border-gray-200">
-              {inspection.nonconformities && inspection.nonconformities.length > 0 ? (
+              {inspection.nonconformities &&
+              inspection.nonconformities.length > 0 ? (
                 <div className="divide-y divide-gray-200">
                   {inspection.nonconformities.map((item: Nonconformity) => (
                     <div key={item.id} className="px-4 py-5 sm:px-6">
@@ -460,39 +500,58 @@ const InspectionDetail: React.FC = () => {
                           <AlertTriangle className="h-5 w-5 text-yellow-500" />
                         </div>
                         <div className="ml-3 flex-1">
-                          <h4 className="text-lg font-medium text-gray-900">{item.title}</h4>
-                          <p className="mt-1 text-sm text-gray-600">{item.description}</p>
+                          <h4 className="text-lg font-medium text-gray-900">
+                            {item.title}
+                          </h4>
+                          <p className="mt-1 text-sm text-gray-600">
+                            {item.description}
+                          </p>
                           {item.notes && (
                             <div className="mt-3 p-3 bg-gray-50 rounded-md">
-                              <p className="text-sm text-gray-600"><span className="font-medium">Observações:</span> {item.notes}</p>
+                              <p className="text-sm text-gray-600">
+                                <span className="font-medium">
+                                  Observações:
+                                </span>{' '}
+                                {item.notes}
+                              </p>
                             </div>
                           )}
-                          
+
                           {/* Fotos relacionadas à não conformidade */}
-                          {item.inspection_photos && item.inspection_photos.length > 0 && (
-                            <div className="mt-4">
-                              <p className="text-sm font-medium text-gray-700 mb-2">Evidências fotográficas:</p>
-                              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                {item.inspection_photos.map((photo: Photo) => (
-                                  <div key={photo.id} className="relative group">
-                                    <img
-                                      src={photo.photo_url}
-                                      alt={photo.caption}
-                                      className="h-24 w-full object-cover rounded-md"
-                                    />
-                                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-200 rounded-md flex items-center justify-center">
-                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                        <button className="bg-white p-1.5 rounded-full shadow">
-                                          <Camera className="h-4 w-4 text-gray-700" />
-                                        </button>
+                          {item.inspection_photos &&
+                            item.inspection_photos.length > 0 && (
+                              <div className="mt-4">
+                                <p className="text-sm font-medium text-gray-700 mb-2">
+                                  Evidências fotográficas:
+                                </p>
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                  {item.inspection_photos.map(
+                                    (photo: Photo) => (
+                                      <div
+                                        key={photo.id}
+                                        className="relative group"
+                                      >
+                                        <img
+                                          src={photo.photo_url}
+                                          alt={photo.caption}
+                                          className="h-24 w-full object-cover rounded-md"
+                                        />
+                                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-200 rounded-md flex items-center justify-center">
+                                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                            <button className="bg-white p-1.5 rounded-full shadow">
+                                              <Camera className="h-4 w-4 text-gray-700" />
+                                            </button>
+                                          </div>
+                                        </div>
+                                        <p className="mt-1 text-xs text-gray-500 truncate">
+                                          {photo.caption}
+                                        </p>
                                       </div>
-                                    </div>
-                                    <p className="mt-1 text-xs text-gray-500 truncate">{photo.caption}</p>
-                                  </div>
-                                ))}
+                                    )
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
                         </div>
                       </div>
                     </div>
@@ -502,7 +561,9 @@ const InspectionDetail: React.FC = () => {
                 <div className="px-6 py-4 text-center text-sm text-gray-500">
                   <div className="flex flex-col items-center py-6">
                     <AlertTriangle className="h-12 w-12 text-gray-300 mb-3" />
-                    <p>Nenhuma não conformidade registrada para esta vistoria.</p>
+                    <p>
+                      Nenhuma não conformidade registrada para esta vistoria.
+                    </p>
                   </div>
                 </div>
               )}
@@ -521,7 +582,8 @@ const InspectionDetail: React.FC = () => {
               </p>
             </div>
             <div className="border-t border-gray-200">
-              {inspection.inspection_photos && inspection.inspection_photos.length > 0 ? (
+              {inspection.inspection_photos &&
+              inspection.inspection_photos.length > 0 ? (
                 <div className="p-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {inspection.inspection_photos.map((photo: Photo) => (
@@ -544,8 +606,12 @@ const InspectionDetail: React.FC = () => {
                           </div>
                         </div>
                         <div className="mt-2">
-                          <p className="text-sm font-medium text-gray-900">{photo.category}</p>
-                          <p className="text-sm text-gray-500">{photo.caption}</p>
+                          <p className="text-sm font-medium text-gray-900">
+                            {photo.category}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {photo.caption}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -567,4 +633,4 @@ const InspectionDetail: React.FC = () => {
   );
 };
 
-export default InspectionDetail; 
+export default InspectionDetail;

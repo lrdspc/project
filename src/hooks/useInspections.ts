@@ -13,10 +13,11 @@ export function useInspections() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const { data, error } = await supabase
         .from('inspections')
-        .select(`
+        .select(
+          `
           *,
           clients (
             id,
@@ -25,14 +26,16 @@ export function useInspections() {
             city,
             state
           )
-        `)
+        `
+        )
         .order('inspection_date', { ascending: false });
-      
+
       if (error) throw error;
-      
+
       return data;
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erro ao buscar vistorias';
+      const message =
+        err instanceof Error ? err.message : 'Erro ao buscar vistorias';
       setError(message);
       return [];
     } finally {
@@ -44,10 +47,11 @@ export function useInspections() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const { data, error } = await supabase
         .from('inspections')
-        .select(`
+        .select(
+          `
           *,
           clients (
             id,
@@ -91,15 +95,17 @@ export function useInspections() {
             nonconformity_id,
             created_at
           )
-        `)
+        `
+        )
         .eq('id', id)
         .single();
-      
+
       if (error) throw error;
-      
+
       return data;
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erro ao buscar vistoria';
+      const message =
+        err instanceof Error ? err.message : 'Erro ao buscar vistoria';
       setError(message);
       return null;
     } finally {
@@ -111,18 +117,19 @@ export function useInspections() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const { data, error } = await supabase
         .from('inspections')
         .insert([inspection])
         .select()
         .single();
-      
+
       if (error) throw error;
-      
+
       return data;
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erro ao criar vistoria';
+      const message =
+        err instanceof Error ? err.message : 'Erro ao criar vistoria';
       setError(message);
       return null;
     } finally {
@@ -130,46 +137,53 @@ export function useInspections() {
     }
   }, []);
 
-  const updateInspection = useCallback(async (id: string, updates: UpdateInspection) => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const { data, error } = await supabase
-        .from('inspections')
-        .update(updates)
-        .eq('id', id)
-        .select()
-        .single();
-      
-      if (error) throw error;
-      
-      return data;
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erro ao atualizar vistoria';
-      setError(message);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const updateInspection = useCallback(
+    async (id: string, updates: UpdateInspection) => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const { data, error } = await supabase
+          .from('inspections')
+          .update(updates)
+          .eq('id', id)
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        return data;
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : 'Erro ao atualizar vistoria';
+        setError(message);
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
   const getInspectionsByClientId = useCallback(async (clientId: string) => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const { data, error } = await supabase
         .from('inspections')
         .select('*')
         .eq('client_id', clientId)
         .order('inspection_date', { ascending: false });
-      
+
       if (error) throw error;
-      
+
       return data;
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erro ao buscar vistorias do cliente';
+      const message =
+        err instanceof Error
+          ? err.message
+          : 'Erro ao buscar vistorias do cliente';
       setError(message);
       return [];
     } finally {
@@ -184,6 +198,6 @@ export function useInspections() {
     getInspectionById,
     createInspection,
     updateInspection,
-    getInspectionsByClientId
+    getInspectionsByClientId,
   };
 }

@@ -16,7 +16,7 @@ const ClientModal: React.FC<ClientModalProps> = ({
   isOpen,
   onClose,
   onSave,
-  client
+  client,
 }) => {
   const [formData, setFormData] = useState<InsertClient>({
     name: '',
@@ -27,7 +27,7 @@ const ClientModal: React.FC<ClientModalProps> = ({
     zip_code: '',
     contact_name: '',
     contact_phone: '',
-    contact_email: ''
+    contact_email: '',
   });
 
   useEffect(() => {
@@ -36,11 +36,13 @@ const ClientModal: React.FC<ClientModalProps> = ({
     }
   }, [client]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 

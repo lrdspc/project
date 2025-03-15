@@ -1,11 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  FileText, 
-  Users, 
-  Calendar, 
-  FilePlus
+import {
+  LayoutDashboard,
+  FileText,
+  Users,
+  Calendar,
+  FilePlus,
 } from 'lucide-react';
 
 const MobileMenu = () => {
@@ -20,11 +20,11 @@ const MobileMenu = () => {
   return (
     <div className="fixed bottom-0 w-full border-t border-gray-200 bg-white">
       <div className="grid grid-cols-5">
-        {mobileNavigation.map((item) => (
+        {mobileNavigation.map(item => (
           <NavLink
             key={item.name}
             to={item.path}
-            className={({ isActive }) => 
+            className={({ isActive }) =>
               `flex flex-col items-center py-3 ${
                 isActive ? 'text-blue-600' : 'text-gray-600'
               }`

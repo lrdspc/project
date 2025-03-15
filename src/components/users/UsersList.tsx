@@ -7,7 +7,8 @@ const users = [
     name: 'Sarah Johnson',
     email: 'sarah.johnson@example.com',
     role: 'Product Manager',
-    imageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    imageUrl:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     status: 'Active',
   },
   {
@@ -15,7 +16,8 @@ const users = [
     name: 'Michael Chen',
     email: 'michael.chen@example.com',
     role: 'Frontend Developer',
-    imageUrl: 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    imageUrl:
+      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     status: 'Active',
   },
   {
@@ -23,7 +25,8 @@ const users = [
     name: 'Alex Rodriguez',
     email: 'alex.rodriguez@example.com',
     role: 'Backend Developer',
-    imageUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    imageUrl:
+      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     status: 'Inactive',
   },
   {
@@ -31,7 +34,8 @@ const users = [
     name: 'Emily Wilson',
     email: 'emily.wilson@example.com',
     role: 'UI Designer',
-    imageUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    imageUrl:
+      'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     status: 'Active',
   },
   {
@@ -39,7 +43,8 @@ const users = [
     name: 'David Kim',
     email: 'david.kim@example.com',
     role: 'QA Engineer',
-    imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    imageUrl:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     status: 'Active',
   },
 ];
@@ -48,7 +53,7 @@ const UsersList: React.FC = () => {
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-md">
       <ul className="divide-y divide-gray-200">
-        {users.map((user) => (
+        {users.map(user => (
           <li key={user.id}>
             <div className="px-4 py-4 flex items-center sm:px-6">
               <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
@@ -59,7 +64,9 @@ const UsersList: React.FC = () => {
                     alt={user.name}
                   />
                   <div className="ml-4">
-                    <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {user.name}
+                    </div>
                     <div className="text-sm text-gray-500">{user.email}</div>
                   </div>
                 </div>
@@ -97,4 +104,4 @@ const UsersList: React.FC = () => {
   );
 };
 
-export default UsersList; 
+export default UsersList;

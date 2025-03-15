@@ -20,9 +20,27 @@ const Chart: React.FC = () => {
     const chartHeight = height - padding * 2;
 
     // Sample data
-    const revenueData = [12000, 19000, 15000, 21000, 25000, 23000, 18000, 27000, 29000, 32000, 30000, 35000];
-    const usersData = [500, 600, 550, 700, 850, 900, 950, 1100, 1200, 1250, 1300, 1400];
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const revenueData = [
+      12000, 19000, 15000, 21000, 25000, 23000, 18000, 27000, 29000, 32000,
+      30000, 35000,
+    ];
+    const usersData = [
+      500, 600, 550, 700, 850, 900, 950, 1100, 1200, 1250, 1300, 1400,
+    ];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
 
     // Find max values for scaling
     const maxRevenue = Math.max(...revenueData) * 1.1;
@@ -51,7 +69,9 @@ const Chart: React.FC = () => {
       ctx.stroke();
 
       // Revenue labels on left
-      const revenueValue = Math.round(maxRevenue - (maxRevenue / gridLines) * i);
+      const revenueValue = Math.round(
+        maxRevenue - (maxRevenue / gridLines) * i
+      );
       ctx.fillText(`$${revenueValue.toLocaleString()}`, padding - 5, y + 3);
     }
 
@@ -85,7 +105,7 @@ const Chart: React.FC = () => {
     revenueData.forEach((value, i) => {
       const x = padding + (chartWidth / revenueData.length) * (i + 0.5);
       const y = padding + chartHeight - (value / maxRevenue) * chartHeight;
-      
+
       ctx.beginPath();
       ctx.arc(x, y, 4, 0, Math.PI * 2);
       ctx.fillStyle = '#3b82f6';
@@ -116,7 +136,7 @@ const Chart: React.FC = () => {
     usersData.forEach((value, i) => {
       const x = padding + (chartWidth / usersData.length) * (i + 0.5);
       const y = padding + chartHeight - (value / maxUsers) * chartHeight;
-      
+
       ctx.beginPath();
       ctx.arc(x, y, 4, 0, Math.PI * 2);
       ctx.fillStyle = '#10b981';
@@ -146,27 +166,34 @@ const Chart: React.FC = () => {
     ctx.fill();
     ctx.fillStyle = '#6b7280';
     ctx.fillText('Users', legendX + 20, legendY + 30);
-
   }, []);
 
   return (
     <div className="bg-white p-4 rounded-lg shadow">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-medium text-gray-900">Performance Overview</h2>
+        <h2 className="text-lg font-medium text-gray-900">
+          Performance Overview
+        </h2>
         <div className="flex space-x-2">
-          <button className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-md">Monthly</button>
-          <button className="px-3 py-1 text-sm text-gray-600 rounded-md">Quarterly</button>
-          <button className="px-3 py-1 text-sm text-gray-600 rounded-md">Yearly</button>
+          <button className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-md">
+            Monthly
+          </button>
+          <button className="px-3 py-1 text-sm text-gray-600 rounded-md">
+            Quarterly
+          </button>
+          <button className="px-3 py-1 text-sm text-gray-600 rounded-md">
+            Yearly
+          </button>
         </div>
       </div>
-      <canvas 
-        ref={canvasRef} 
-        width={800} 
-        height={400} 
+      <canvas
+        ref={canvasRef}
+        width={800}
+        height={400}
         className="w-full h-64"
       ></canvas>
     </div>
   );
 };
 
-export default Chart; 
+export default Chart;

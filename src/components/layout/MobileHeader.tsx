@@ -16,13 +16,15 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ toggleSidebar }) => {
         <span className="sr-only">Abrir menu</span>
         <Menu className="h-6 w-6" />
       </button>
-      
+
       <div className="flex items-center">
         <Link to="/" className="flex items-center">
-          <span className="text-xl font-bold">Brasi<span className="text-blue-600">lit</span></span>
+          <span className="text-xl font-bold">
+            Brasi<span className="text-blue-600">lit</span>
+          </span>
         </Link>
       </div>
-      
+
       <div className="flex items-center gap-2">
         <button
           className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -35,4 +37,4 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ toggleSidebar }) => {
   );
 };
 
-export default MobileHeader; 
+export default MobileHeader;

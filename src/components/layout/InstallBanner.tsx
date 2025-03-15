@@ -11,13 +11,15 @@ interface BeforeInstallPromptEvent extends Event {
 const InstallBanner: React.FC = () => {
   const [showBanner, setShowBanner] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
     // Verificar se o app já está instalado
     const checkIfInstalled = () => {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-                           (window.navigator as { standalone?: boolean }).standalone === true;
+      const isStandalone =
+        window.matchMedia('(display-mode: standalone)').matches ||
+        (window.navigator as { standalone?: boolean }).standalone === true;
       setIsInstalled(isStandalone);
     };
 
@@ -44,12 +46,17 @@ const InstallBanner: React.FC = () => {
         setShowBanner(false);
       }
     };
-    
+
     mediaQuery.addEventListener('change', handleChange);
 
     // Verificar se o evento deferredPrompt já existe na window
-    if ((window as { deferredPrompt?: BeforeInstallPromptEvent }).deferredPrompt) {
-      setDeferredPrompt((window as { deferredPrompt?: BeforeInstallPromptEvent }).deferredPrompt || null);
+    if (
+      (window as { deferredPrompt?: BeforeInstallPromptEvent }).deferredPrompt
+    ) {
+      setDeferredPrompt(
+        (window as { deferredPrompt?: BeforeInstallPromptEvent })
+          .deferredPrompt || null
+      );
       if (!isInstalled) {
         setShowBanner(true);
       }
@@ -69,11 +76,14 @@ const InstallBanner: React.FC = () => {
 
     // Esperar pela escolha do usuário
     const { outcome } = await deferredPrompt.userChoice;
-    console.log(`Usuário ${outcome === 'accepted' ? 'aceitou' : 'recusou'} a instalação`);
+    console.log(
+      `Usuário ${outcome === 'accepted' ? 'aceitou' : 'recusou'} a instalação`
+    );
 
     // Limpar o deferredPrompt - só pode ser usado uma vez
     setDeferredPrompt(null);
-    (window as { deferredPrompt?: BeforeInstallPromptEvent }).deferredPrompt = undefined;
+    (window as { deferredPrompt?: BeforeInstallPromptEvent }).deferredPrompt =
+      undefined;
     setShowBanner(false);
   };
 
@@ -95,7 +105,9 @@ const InstallBanner: React.FC = () => {
           <Download className="h-6 w-6 text-blue-600 mr-3" />
           <div>
             <h3 className="font-medium text-blue-800">Instalar aplicativo</h3>
-            <p className="text-sm text-blue-600">Usar o Sistema de Vistorias offline e em tela cheia</p>
+            <p className="text-sm text-blue-600">
+              Usar o Sistema de Vistorias offline e em tela cheia
+            </p>
           </div>
         </div>
         <div className="flex items-center">
@@ -118,4 +130,4 @@ const InstallBanner: React.FC = () => {
   );
 };
 
-export default InstallBanner; 
+export default InstallBanner;

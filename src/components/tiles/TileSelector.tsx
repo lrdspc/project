@@ -60,7 +60,10 @@ const TileSelector: React.FC<TileSelectorProps> = ({ onAdd }) => {
   };
 
   // Dimensions options based on selected line and thickness
-  const getDimensionsOptions = (selectedLine: string, selectedThickness: string) => {
+  const getDimensionsOptions = (
+    selectedLine: string,
+    selectedThickness: string
+  ) => {
     if (!selectedLine || !selectedThickness) return [];
 
     // This is a simplified mapping for demonstration
@@ -107,11 +110,13 @@ const TileSelector: React.FC<TileSelectorProps> = ({ onAdd }) => {
   const handleDimensionsChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedDimensions = e.target.value;
     setDimensions(selectedDimensions);
-    
+
     // Find the area for the selected dimension
     const dimensionOptions = getDimensionsOptions(line, thickness);
-    const selectedDimensionObj = dimensionOptions.find(d => d.id === selectedDimensions);
-    
+    const selectedDimensionObj = dimensionOptions.find(
+      d => d.id === selectedDimensions
+    );
+
     if (selectedDimensionObj && quantity > 0) {
       setArea(+(selectedDimensionObj.area * quantity).toFixed(2));
     } else {
@@ -122,11 +127,13 @@ const TileSelector: React.FC<TileSelectorProps> = ({ onAdd }) => {
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuantity = parseInt(e.target.value, 10) || 0;
     setQuantity(newQuantity);
-    
+
     // Update area based on the new quantity
     const dimensionOptions = getDimensionsOptions(line, thickness);
-    const selectedDimensionObj = dimensionOptions.find(d => d.id === dimensions);
-    
+    const selectedDimensionObj = dimensionOptions.find(
+      d => d.id === dimensions
+    );
+
     if (selectedDimensionObj) {
       setArea(+(selectedDimensionObj.area * newQuantity).toFixed(2));
     }
@@ -155,26 +162,30 @@ const TileSelector: React.FC<TileSelectorProps> = ({ onAdd }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!line || !thickness || !dimensions || quantity <= 0) {
       alert('Por favor, preencha todos os campos corretamente.');
       return;
     }
-    
+
     // Find display names for the form values
     const lineObj = tileLines.find(l => l.id === line);
-    const thicknessObj = getThicknessOptions(line).find(t => t.id === thickness);
-    const dimensionsObj = getDimensionsOptions(line, thickness).find(d => d.id === dimensions);
-    
+    const thicknessObj = getThicknessOptions(line).find(
+      t => t.id === thickness
+    );
+    const dimensionsObj = getDimensionsOptions(line, thickness).find(
+      d => d.id === dimensions
+    );
+
     const tile: TileSelection = {
       id: Date.now().toString(),
       line: lineObj?.name || line,
       thickness: thicknessObj?.name || thickness,
       dimensions: dimensionsObj?.name || dimensions,
       quantity,
-      area
+      area,
     };
-    
+
     onAdd(tile);
     handleReset();
   };
@@ -191,7 +202,10 @@ const TileSelector: React.FC<TileSelectorProps> = ({ onAdd }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Tile Line Selection */}
         <div>
-          <label htmlFor="line" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="line"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Linha
           </label>
           <select
@@ -212,7 +226,10 @@ const TileSelector: React.FC<TileSelectorProps> = ({ onAdd }) => {
 
         {/* Thickness Selection */}
         <div>
-          <label htmlFor="thickness" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="thickness"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Espessura
           </label>
           <select
@@ -236,7 +253,10 @@ const TileSelector: React.FC<TileSelectorProps> = ({ onAdd }) => {
 
         {/* Dimensions Selection */}
         <div>
-          <label htmlFor="dimensions" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="dimensions"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Dimensões
           </label>
           <select
@@ -262,7 +282,10 @@ const TileSelector: React.FC<TileSelectorProps> = ({ onAdd }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Quantity Input */}
         <div>
-          <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="quantity"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Quantidade
           </label>
           <div className="flex rounded-md shadow-sm">
@@ -303,7 +326,10 @@ const TileSelector: React.FC<TileSelectorProps> = ({ onAdd }) => {
 
         {/* Area Calculation */}
         <div>
-          <label htmlFor="area" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="area"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Área Total (m²)
           </label>
           <input
@@ -331,7 +357,9 @@ const TileSelector: React.FC<TileSelectorProps> = ({ onAdd }) => {
           type="submit"
           disabled={!isFormValid()}
           className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-            isFormValid() ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed'
+            isFormValid()
+              ? 'bg-blue-600 hover:bg-blue-700'
+              : 'bg-gray-300 cursor-not-allowed'
           } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
         >
           <Plus className="mr-2 h-4 w-4" />

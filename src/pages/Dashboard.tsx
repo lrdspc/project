@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Calendar as CalendarIcon, 
-  FileText, 
-  Search, 
-  Users, 
-  RefreshCw, 
+import {
+  Calendar as CalendarIcon,
+  FileText,
+  Search,
+  Users,
+  RefreshCw,
   PlusCircle,
   MapPin,
   BarChart2,
@@ -14,7 +14,7 @@ import {
   ChevronRight,
   ClipboardList,
   Camera,
-  Building
+  Building,
 } from 'lucide-react';
 import { format, addDays, isSameDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -45,7 +45,7 @@ const Dashboard: React.FC = () => {
   const { loading, error, getInspections } = useInspections();
   const { profile } = useProfile();
   const [inspections, setInspections] = useState<Inspection[]>([]);
-  
+
   useEffect(() => {
     loadInspections();
   }, []);
@@ -63,8 +63,12 @@ const Dashboard: React.FC = () => {
     return (
       <div className="px-4 sm:px-6 lg:px-8 py-6">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Bem-vindo ao Sistema de Vistorias</h1>
-          <p className="text-gray-600">Olá {profile?.full_name}, vamos começar?</p>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Bem-vindo ao Sistema de Vistorias
+          </h1>
+          <p className="text-gray-600">
+            Olá {profile?.full_name}, vamos começar?
+          </p>
         </div>
 
         <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
@@ -73,10 +77,13 @@ const Dashboard: React.FC = () => {
               <div className="p-3 bg-blue-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <ClipboardList className="h-8 w-8 text-blue-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Como Funciona</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Como Funciona
+              </h2>
               <p className="text-gray-600 mb-8">
-                Este sistema foi desenvolvido para facilitar o processo de vistorias técnicas em coberturas. 
-                Siga o passo a passo abaixo para realizar sua primeira vistoria.
+                Este sistema foi desenvolvido para facilitar o processo de
+                vistorias técnicas em coberturas. Siga o passo a passo abaixo
+                para realizar sua primeira vistoria.
               </p>
             </div>
 
@@ -86,9 +93,12 @@ const Dashboard: React.FC = () => {
                   <div className="bg-white rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
                     <Users className="h-6 w-6 text-blue-600" />
                   </div>
-                  <h3 className="font-medium text-gray-900 mb-2">1. Cadastre o Cliente</h3>
+                  <h3 className="font-medium text-gray-900 mb-2">
+                    1. Cadastre o Cliente
+                  </h3>
                   <p className="text-sm text-gray-600">
-                    Comece cadastrando as informações do cliente e do local da vistoria.
+                    Comece cadastrando as informações do cliente e do local da
+                    vistoria.
                   </p>
                 </div>
               </div>
@@ -98,9 +108,12 @@ const Dashboard: React.FC = () => {
                   <div className="bg-white rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
                     <ClipboardList className="h-6 w-6 text-blue-600" />
                   </div>
-                  <h3 className="font-medium text-gray-900 mb-2">2. Realize a Vistoria</h3>
+                  <h3 className="font-medium text-gray-900 mb-2">
+                    2. Realize a Vistoria
+                  </h3>
                   <p className="text-sm text-gray-600">
-                    Siga o passo a passo para documentar todas as informações necessárias.
+                    Siga o passo a passo para documentar todas as informações
+                    necessárias.
                   </p>
                 </div>
               </div>
@@ -110,9 +123,12 @@ const Dashboard: React.FC = () => {
                   <div className="bg-white rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
                     <Camera className="h-6 w-6 text-blue-600" />
                   </div>
-                  <h3 className="font-medium text-gray-900 mb-2">3. Registre Fotos</h3>
+                  <h3 className="font-medium text-gray-900 mb-2">
+                    3. Registre Fotos
+                  </h3>
                   <p className="text-sm text-gray-600">
-                    Capture fotos para documentar as condições e não conformidades encontradas.
+                    Capture fotos para documentar as condições e não
+                    conformidades encontradas.
                   </p>
                 </div>
               </div>
@@ -132,7 +148,9 @@ const Dashboard: React.FC = () => {
 
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <div className="p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Recursos Disponíveis</h2>
+            <h2 className="text-lg font-medium text-gray-900 mb-4">
+              Recursos Disponíveis
+            </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="border border-gray-200 rounded-lg p-4">
                 <div className="flex items-center mb-2">
@@ -203,50 +221,59 @@ const Dashboard: React.FC = () => {
   // Stats summary data
   const statsSummary = [
     {
-      title: "Vistorias do Mês",
-      value: "28",
-      change: "12%",
+      title: 'Vistorias do Mês',
+      value: '28',
+      change: '12%',
       isPositive: true,
-      icon: <FileText className="h-6 w-6 text-blue-500" />
+      icon: <FileText className="h-6 w-6 text-blue-500" />,
     },
     {
-      title: "Relatórios Pendentes",
-      value: "4",
-      change: "25%",
+      title: 'Relatórios Pendentes',
+      value: '4',
+      change: '25%',
       isPositive: false,
-      icon: <BarChart2 className="h-6 w-6 text-red-500" />
+      icon: <BarChart2 className="h-6 w-6 text-red-500" />,
     },
     {
-      title: "Distância Percorrida",
-      value: "358 km",
-      change: "8%",
+      title: 'Distância Percorrida',
+      value: '358 km',
+      change: '8%',
       isPositive: true,
-      icon: <MapPin className="h-6 w-6 text-green-500" />
-    }
+      icon: <MapPin className="h-6 w-6 text-green-500" />,
+    },
   ];
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-6">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600">Bem-vindo(a) de volta, João! Aqui está o resumo do seu dia.</p>
+        <p className="text-gray-600">
+          Bem-vindo(a) de volta, João! Aqui está o resumo do seu dia.
+        </p>
       </div>
 
       {/* Stats Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {statsSummary.map((stat, index) => (
-          <div key={index} className="bg-white rounded-lg shadow p-5 hover:shadow-md transition-shadow duration-300">
+          <div
+            key={index}
+            className="bg-white rounded-lg shadow p-5 hover:shadow-md transition-shadow duration-300"
+          >
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm font-medium text-gray-500">{stat.title}</p>
-                <p className="mt-1 text-2xl font-semibold text-gray-900">{stat.value}</p>
+                <p className="text-sm font-medium text-gray-500">
+                  {stat.title}
+                </p>
+                <p className="mt-1 text-2xl font-semibold text-gray-900">
+                  {stat.value}
+                </p>
               </div>
-              <div className="p-2 bg-gray-50 rounded-lg">
-                {stat.icon}
-              </div>
+              <div className="p-2 bg-gray-50 rounded-lg">{stat.icon}</div>
             </div>
             <div className="mt-4 flex items-center">
-              <div className={`flex items-center ${stat.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+              <div
+                className={`flex items-center ${stat.isPositive ? 'text-green-600' : 'text-red-600'}`}
+              >
                 {stat.isPositive ? (
                   <ArrowUpRight className="h-4 w-4 mr-1" />
                 ) : (
@@ -254,7 +281,9 @@ const Dashboard: React.FC = () => {
                 )}
                 <span className="text-sm font-medium">{stat.change}</span>
               </div>
-              <span className="text-sm text-gray-500 ml-2">vs mês anterior</span>
+              <span className="text-sm text-gray-500 ml-2">
+                vs mês anterior
+              </span>
             </div>
           </div>
         ))}
@@ -266,12 +295,14 @@ const Dashboard: React.FC = () => {
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
             <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
               <h2 className="text-lg font-medium text-gray-900">Meu Dia</h2>
-              <p className="mt-1 text-sm text-gray-600">Vistorias agendadas para hoje</p>
+              <p className="mt-1 text-sm text-gray-600">
+                Vistorias agendadas para hoje
+              </p>
             </div>
             <div className="px-4 py-3 sm:px-6">
               {inspections.length > 0 ? (
                 <div className="space-y-3">
-                  {inspections.map((inspection) => (
+                  {inspections.map(inspection => (
                     <ScheduledInspection
                       key={inspection.id}
                       inspection={inspection}
@@ -280,12 +311,14 @@ const Dashboard: React.FC = () => {
                 </div>
               ) : (
                 <div className="text-center py-6">
-                  <p className="text-gray-500">Não há vistorias agendadas para hoje.</p>
+                  <p className="text-gray-500">
+                    Não há vistorias agendadas para hoje.
+                  </p>
                 </div>
               )}
               <div className="mt-4 flex justify-end">
-                <Link 
-                  to="/calendario" 
+                <Link
+                  to="/calendario"
                   className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800"
                 >
                   Ver todos os agendamentos
@@ -294,24 +327,24 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Action Buttons */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-            <Link 
+            <Link
               to="/nova-vistoria"
               className="bg-blue-600 text-white text-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors shadow-sm flex flex-col items-center justify-center"
             >
               <PlusCircle className="h-6 w-6 mb-1" />
               <span className="text-sm font-medium">Nova Vistoria</span>
             </Link>
-            <Link 
+            <Link
               to="/clientes"
               className="bg-white text-gray-700 text-center py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm flex flex-col items-center justify-center"
             >
               <Search className="h-6 w-6 mb-1 text-gray-500" />
               <span className="text-sm font-medium">Buscar Cliente</span>
             </Link>
-            <Link 
+            <Link
               to="/relatorios"
               className="bg-white text-gray-700 text-center py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm flex flex-col items-center justify-center"
             >
@@ -333,27 +366,37 @@ const Dashboard: React.FC = () => {
           {/* Next 7 Days Schedule */}
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
             <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-              <h2 className="text-lg font-medium text-gray-900">Próximos 7 Dias</h2>
+              <h2 className="text-lg font-medium text-gray-900">
+                Próximos 7 Dias
+              </h2>
             </div>
             <div className="p-4">
               <div className="space-y-2">
                 {nextDaysSchedule.map((day, idx) => {
                   const isToday = isSameDay(day.date, new Date());
                   return (
-                    <div 
-                      key={idx} 
+                    <div
+                      key={idx}
                       className={`flex items-center justify-between p-2 rounded-md ${
-                        isToday ? 'bg-blue-50 border-l-4 border-blue-500' : 'hover:bg-gray-50'
+                        isToday
+                          ? 'bg-blue-50 border-l-4 border-blue-500'
+                          : 'hover:bg-gray-50'
                       }`}
                     >
                       <div className="flex items-center">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          isToday ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
-                        }`}>
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            isToday
+                              ? 'bg-blue-100 text-blue-700'
+                              : 'bg-gray-100 text-gray-600'
+                          }`}
+                        >
                           {format(day.date, 'dd')}
                         </div>
                         <div className="ml-3">
-                          <p className={`text-sm font-medium ${isToday ? 'text-blue-700' : 'text-gray-700'}`}>
+                          <p
+                            className={`text-sm font-medium ${isToday ? 'text-blue-700' : 'text-gray-700'}`}
+                          >
                             {format(day.date, 'EEEE', { locale: ptBR })}
                           </p>
                           <p className="text-xs text-gray-500">
@@ -361,11 +404,13 @@ const Dashboard: React.FC = () => {
                           </p>
                         </div>
                       </div>
-                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        day.count > 0 
-                          ? 'bg-blue-100 text-blue-800' 
-                          : 'bg-gray-100 text-gray-800'
-                      }`}>
+                      <div
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          day.count > 0
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-gray-100 text-gray-800'
+                        }`}
+                      >
                         {day.count} {day.count === 1 ? 'vistoria' : 'vistorias'}
                       </div>
                     </div>
@@ -373,8 +418,8 @@ const Dashboard: React.FC = () => {
                 })}
               </div>
               <div className="mt-4 flex justify-end">
-                <Link 
-                  to="/calendario" 
+                <Link
+                  to="/calendario"
                   className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800"
                 >
                   Ver calendário completo
@@ -387,8 +432,12 @@ const Dashboard: React.FC = () => {
           {/* Pending Reports */}
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
             <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-              <h2 className="text-lg font-medium text-gray-900">Relatórios Pendentes</h2>
-              <p className="mt-1 text-sm text-gray-600">Vistorias realizadas aguardando relatório</p>
+              <h2 className="text-lg font-medium text-gray-900">
+                Relatórios Pendentes
+              </h2>
+              <p className="mt-1 text-sm text-gray-600">
+                Vistorias realizadas aguardando relatório
+              </p>
             </div>
             <div className="p-4">
               {loading ? (
@@ -411,16 +460,21 @@ const Dashboard: React.FC = () => {
                     <PendingReport
                       key={report.id}
                       id={report.id}
-                      clientName={report.clients?.name || 'Cliente não encontrado'}
-                      inspectionDate={format(new Date(report.inspection_date), 'dd/MM/yyyy')}
+                      clientName={
+                        report.clients?.name || 'Cliente não encontrado'
+                      }
+                      inspectionDate={format(
+                        new Date(report.inspection_date),
+                        'dd/MM/yyyy'
+                      )}
                       daysOverdue={0}
                       onClick={() => console.log(`Clicked report ${report.id}`)}
                     />
                   ))
               )}
               <div className="mt-4 flex justify-end">
-                <Link 
-                  to="/relatorios" 
+                <Link
+                  to="/relatorios"
                   className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800"
                 >
                   Ver todos os relatórios
@@ -436,7 +490,9 @@ const Dashboard: React.FC = () => {
 };
 
 // Definir o componente corrigindo a tipagem
-const ScheduledInspection: React.FC<{ inspection: Inspection }> = ({ inspection }) => {
+const ScheduledInspection: React.FC<{ inspection: Inspection }> = ({
+  inspection,
+}) => {
   return (
     <Link to={`/vistoria/${inspection.id}`} className="block hover:bg-gray-50">
       <div className="px-4 py-4 sm:px-6 border-b border-gray-200">
@@ -446,21 +502,33 @@ const ScheduledInspection: React.FC<{ inspection: Inspection }> = ({ inspection 
               <Building className="h-5 w-5 text-blue-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-900">{inspection.clients?.name}</p>
+              <p className="text-sm font-medium text-gray-900">
+                {inspection.clients?.name}
+              </p>
               <p className="text-sm text-gray-500">
-                {format(new Date(inspection.inspection_date), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+                {format(
+                  new Date(inspection.inspection_date),
+                  "dd 'de' MMMM 'de' yyyy",
+                  { locale: ptBR }
+                )}
               </p>
             </div>
           </div>
           <div className="flex items-center">
-            <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
-              inspection.status === 'completed' ? 'bg-green-100 text-green-800' : 
-              inspection.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' : 
-              'bg-gray-100 text-gray-800'
-            }`}>
-              {inspection.status === 'completed' ? 'Concluída' : 
-               inspection.status === 'in_progress' ? 'Em Andamento' : 
-               'Pendente'}
+            <span
+              className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                inspection.status === 'completed'
+                  ? 'bg-green-100 text-green-800'
+                  : inspection.status === 'in_progress'
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : 'bg-gray-100 text-gray-800'
+              }`}
+            >
+              {inspection.status === 'completed'
+                ? 'Concluída'
+                : inspection.status === 'in_progress'
+                  ? 'Em Andamento'
+                  : 'Pendente'}
             </span>
             <ChevronRight className="ml-2 h-5 w-5 text-gray-400" />
           </div>

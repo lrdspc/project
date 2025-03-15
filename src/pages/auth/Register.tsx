@@ -10,22 +10,26 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [registrationError, setRegistrationError] = useState<string | null>(null);
+  const [registrationError, setRegistrationError] = useState<string | null>(
+    null
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       // Sign up the user
-      const { data: authData, error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-          data: {
-            full_name: fullName
-          }
+      const { data: authData, error: signUpError } = await supabase.auth.signUp(
+        {
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+            data: {
+              full_name: fullName,
+            },
+          },
         }
-      });
+      );
 
       if (signUpError) throw signUpError;
 
@@ -37,8 +41,8 @@ const Register: React.FC = () => {
             {
               user_id: authData.user.id,
               full_name: fullName,
-              role: 'technician'
-            }
+              role: 'technician',
+            },
           ]);
 
         if (profileError) throw profileError;
@@ -55,15 +59,19 @@ const Register: React.FC = () => {
       }
     } catch (err) {
       console.error('Erro de registro:', err);
-      
+
       // Verificar erro específico de usuário já cadastrado
       if (err instanceof Error) {
         if (err.message.includes('User already registered')) {
-          setRegistrationError('Este email já está cadastrado. Tente fazer login.');
+          setRegistrationError(
+            'Este email já está cadastrado. Tente fazer login.'
+          );
         } else if (err.message.includes('Invalid email')) {
           setRegistrationError('Email inválido. Verifique e tente novamente.');
         } else if (err.message.includes('Password should be')) {
-          setRegistrationError('A senha não atende aos requisitos mínimos (mínimo 6 caracteres).');
+          setRegistrationError(
+            'A senha não atende aos requisitos mínimos (mínimo 6 caracteres).'
+          );
         } else {
           setRegistrationError(err.message);
         }
@@ -83,7 +91,9 @@ const Register: React.FC = () => {
         <div className="flex justify-center">
           <div className="flex items-center space-x-2">
             <Zap className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold">Brasi<span className="text-blue-600">lit</span></span>
+            <span className="text-2xl font-bold">
+              Brasi<span className="text-blue-600">lit</span>
+            </span>
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -93,8 +103,11 @@ const Register: React.FC = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          {(registrationError) && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+          {registrationError && (
+            <div
+              className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative"
+              role="alert"
+            >
               <span className="block sm:inline">{registrationError}</span>
               {registrationError.includes('já está cadastrado') && (
                 <div className="mt-2">
@@ -108,10 +121,13 @@ const Register: React.FC = () => {
               )}
             </div>
           )}
-          
+
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="fullName"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Nome Completo
               </label>
               <div className="mt-1 relative rounded-md shadow-sm">
@@ -124,7 +140,7 @@ const Register: React.FC = () => {
                   type="text"
                   required
                   value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  onChange={e => setFullName(e.target.value)}
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="Seu nome completo"
                 />
@@ -132,7 +148,10 @@ const Register: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 E-mail
               </label>
               <div className="mt-1 relative rounded-md shadow-sm">
@@ -146,7 +165,7 @@ const Register: React.FC = () => {
                   autoComplete="email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="seu@email.com"
                 />
@@ -154,7 +173,10 @@ const Register: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Senha
               </label>
               <div className="mt-1 relative rounded-md shadow-sm">
@@ -168,7 +190,7 @@ const Register: React.FC = () => {
                   autoComplete="new-password"
                   required
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="••••••••"
                 />
@@ -180,13 +202,31 @@ const Register: React.FC = () => {
                 type="submit"
                 disabled={loading}
                 className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-                  loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                  loading
+                    ? 'bg-blue-400 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700'
                 } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
               >
                 {loading ? (
-                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
                   </svg>
                 ) : (
                   'Criar Conta'
@@ -220,6 +260,6 @@ const Register: React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Register;

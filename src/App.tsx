@@ -41,43 +41,54 @@ function App() {
           <Route path="/auth/callback" element={<VerifyToken />} />
           <Route path="/supabase-test" element={<SupabaseTest />} />
           <Route path="/diagnosticos" element={<Diagnostics />} />
-          <Route path="/*" element={
-            <PrivateRoute>
-              <div className="flex h-screen bg-gray-50">
-                {/* Sidebar for larger screens */}
-                <div className="hidden lg:flex">
-                  <Sidebar />
-                </div>
+          <Route
+            path="/*"
+            element={
+              <PrivateRoute>
+                <div className="flex h-screen bg-gray-50">
+                  {/* Sidebar for larger screens */}
+                  <div className="hidden lg:flex">
+                    <Sidebar />
+                  </div>
 
-                {/* Main content */}
-                <div className="flex flex-col flex-1 overflow-x-hidden">
-                  <MobileHeader toggleSidebar={toggleSidebar} />
-                  
-                  {/* Mobile sidebar */}
-                  <div className={`lg:hidden ${sidebarOpen ? 'block' : 'hidden'} fixed inset-0 z-50`}>
-                    <div className="absolute inset-0 bg-gray-600 bg-opacity-75" onClick={toggleSidebar}></div>
-                    <div className="absolute inset-y-0 left-0 flex flex-col w-64 bg-white shadow-xl">
-                      <Sidebar />
+                  {/* Main content */}
+                  <div className="flex flex-col flex-1 overflow-x-hidden">
+                    <MobileHeader toggleSidebar={toggleSidebar} />
+
+                    {/* Mobile sidebar */}
+                    <div
+                      className={`lg:hidden ${sidebarOpen ? 'block' : 'hidden'} fixed inset-0 z-50`}
+                    >
+                      <div
+                        className="absolute inset-0 bg-gray-600 bg-opacity-75"
+                        onClick={toggleSidebar}
+                      ></div>
+                      <div className="absolute inset-y-0 left-0 flex flex-col w-64 bg-white shadow-xl">
+                        <Sidebar />
+                      </div>
+                    </div>
+
+                    {/* Page content */}
+                    <div className="flex-1 overflow-y-auto">
+                      <Routes>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/clientes" element={<Clients />} />
+                        <Route path="/vistorias" element={<NewInspection />} />
+                        <Route
+                          path="/vistorias/:id"
+                          element={<InspectionDetail />}
+                        />
+                        <Route path="/relatorios" element={<Reports />} />
+                        <Route path="/calendario" element={<Calendar />} />
+                      </Routes>
                     </div>
                   </div>
-
-                  {/* Page content */}
-                  <div className="flex-1 overflow-y-auto">
-                    <Routes>
-                      <Route path="/" element={<Dashboard />} />
-                      <Route path="/clientes" element={<Clients />} />
-                      <Route path="/vistorias" element={<NewInspection />} />
-                      <Route path="/vistorias/:id" element={<InspectionDetail />} />
-                      <Route path="/relatorios" element={<Reports />} />
-                      <Route path="/calendario" element={<Calendar />} />
-                    </Routes>
-                  </div>
                 </div>
-              </div>
-            </PrivateRoute>
-          } />
+              </PrivateRoute>
+            }
+          />
         </Routes>
-        
+
         {/* Banner de instalação do PWA */}
         <InstallBanner />
       </Router>

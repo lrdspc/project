@@ -1,5 +1,11 @@
 import React from 'react';
-import { UserCircle, FileText, MessageSquare, Calendar, CircleDollarSign } from 'lucide-react';
+import {
+  UserCircle,
+  FileText,
+  MessageSquare,
+  Calendar,
+  CircleDollarSign,
+} from 'lucide-react';
 
 const activities = [
   {
@@ -84,7 +90,9 @@ const RecentActivity: React.FC = () => {
                         </a>
                       </span>
                     </div>
-                    <p className="mt-0.5 text-sm text-gray-500">{activity.time}</p>
+                    <p className="mt-0.5 text-sm text-gray-500">
+                      {activity.time}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -96,4 +104,4 @@ const RecentActivity: React.FC = () => {
   );
 };
 
-export default RecentActivity; 
+export default RecentActivity;

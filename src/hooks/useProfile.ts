@@ -14,19 +14,20 @@ export function useProfile() {
   const getProfile = useCallback(async () => {
     try {
       if (!user) return null;
-      
+
       const { data, error } = await supabase
         .from('users_profiles')
         .select('*')
         .eq('user_id', user.id)
         .single();
-      
+
       if (error) throw error;
-      
+
       setProfile(data);
       return data;
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erro ao buscar perfil';
+      const message =
+        err instanceof Error ? err.message : 'Erro ao buscar perfil';
       setError(message);
       return null;
     } finally {

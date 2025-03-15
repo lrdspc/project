@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Plus, Building2, MapPin, Phone, ChevronRight, ChevronLeft } from 'lucide-react';
+import {
+  Search,
+  Plus,
+  Building2,
+  MapPin,
+  Phone,
+  ChevronRight,
+  ChevronLeft,
+} from 'lucide-react';
 import ProgressBar from '../../components/ui/ProgressBar';
 
 // Mock data for clients
@@ -11,7 +19,7 @@ const mockClients = [
     type: 'Residencial',
     address: 'Rua das Acácias, 123 - São Paulo, SP',
     contact: '(11) 9876-5432',
-    lastVisit: '10/01/2025'
+    lastVisit: '10/01/2025',
   },
   {
     id: 'CLT-002',
@@ -19,7 +27,7 @@ const mockClients = [
     type: 'Institucional',
     address: 'Av. Educação, 500 - São Paulo, SP',
     contact: '(11) 3456-7890',
-    lastVisit: '15/02/2025'
+    lastVisit: '15/02/2025',
   },
   {
     id: 'CLT-003',
@@ -27,7 +35,7 @@ const mockClients = [
     type: 'Comercial',
     address: 'Av. Comercial, 1500 - Guarulhos, SP',
     contact: '(11) 2345-6789',
-    lastVisit: '03/03/2025'
+    lastVisit: '03/03/2025',
   },
   {
     id: 'CLT-004',
@@ -35,7 +43,7 @@ const mockClients = [
     type: 'Comercial',
     address: 'Av. Paulista, 1000 - São Paulo, SP',
     contact: '(11) 5555-9999',
-    lastVisit: '20/03/2025'
+    lastVisit: '20/03/2025',
   },
   {
     id: 'CLT-005',
@@ -43,8 +51,8 @@ const mockClients = [
     type: 'Residencial',
     address: 'Rua dos Lírios, 45 - Campinas, SP',
     contact: '(19) 98765-4321',
-    lastVisit: 'Primeira visita'
-  }
+    lastVisit: 'Primeira visita',
+  },
 ];
 
 const ClientSelection: React.FC = () => {
@@ -55,18 +63,19 @@ const ClientSelection: React.FC = () => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value;
     setSearchTerm(term);
-    
+
     if (term.trim() === '') {
       setFilteredClients(mockClients);
       return;
     }
-    
-    const filtered = mockClients.filter(client => 
-      client.name.toLowerCase().includes(term.toLowerCase()) ||
-      client.id.toLowerCase().includes(term.toLowerCase()) ||
-      client.address.toLowerCase().includes(term.toLowerCase())
+
+    const filtered = mockClients.filter(
+      client =>
+        client.name.toLowerCase().includes(term.toLowerCase()) ||
+        client.id.toLowerCase().includes(term.toLowerCase()) ||
+        client.address.toLowerCase().includes(term.toLowerCase())
     );
-    
+
     setFilteredClients(filtered);
   };
 
@@ -81,23 +90,22 @@ const ClientSelection: React.FC = () => {
     'Telhas',
     'Não Conformidades',
     'Fotos',
-    'Finalização'
+    'Finalização',
   ];
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-6">
       <div className="flex items-center mb-6">
-        <Link to="/nova-vistoria" className="text-gray-500 hover:text-gray-700 mr-2">
+        <Link
+          to="/nova-vistoria"
+          className="text-gray-500 hover:text-gray-700 mr-2"
+        >
           <ChevronLeft className="h-5 w-5" />
         </Link>
         <h1 className="text-2xl font-bold text-gray-900">Seleção de Cliente</h1>
       </div>
 
-      <ProgressBar 
-        currentStep={1} 
-        totalSteps={6} 
-        labels={inspectionSteps}
-      />
+      <ProgressBar currentStep={1} totalSteps={6} labels={inspectionSteps} />
 
       <div className="bg-white shadow rounded-lg overflow-hidden mt-6">
         <div className="p-6">
@@ -116,7 +124,7 @@ const ClientSelection: React.FC = () => {
 
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-medium text-gray-900">Clientes</h2>
-            <Link 
+            <Link
               to="/novo-cliente"
               className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
@@ -128,19 +136,21 @@ const ClientSelection: React.FC = () => {
           <div className="space-y-3 mt-4">
             {filteredClients.length > 0 ? (
               filteredClients.map(client => (
-                <div 
+                <div
                   key={client.id}
                   className="border border-gray-200 rounded-lg hover:shadow-md transition-shadow cursor-pointer p-4"
                   onClick={() => handleSelectClient(client.id)}
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="font-medium text-gray-900">{client.name}</h3>
+                      <h3 className="font-medium text-gray-900">
+                        {client.name}
+                      </h3>
                       <p className="text-sm text-gray-500">ID: {client.id}</p>
                     </div>
                     <ChevronRight className="h-5 w-5 text-gray-400" />
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-3">
                     <div className="flex items-center text-sm text-gray-600">
                       <Building2 className="h-4 w-4 mr-1 text-gray-500" />
@@ -155,7 +165,7 @@ const ClientSelection: React.FC = () => {
                       <span>{client.contact}</span>
                     </div>
                   </div>
-                  
+
                   <div className="mt-3 text-xs text-gray-500">
                     Última visita: {client.lastVisit}
                   </div>
@@ -163,10 +173,10 @@ const ClientSelection: React.FC = () => {
               ))
             ) : (
               <div className="text-center py-10">
-                <p className="text-gray-500">Nenhum cliente encontrado com os termos de busca.</p>
-                <button 
-                  className="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
+                <p className="text-gray-500">
+                  Nenhum cliente encontrado com os termos de busca.
+                </p>
+                <button className="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                   <Plus className="mr-2 h-4 w-4" />
                   Cadastrar Novo Cliente
                 </button>

@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Calendar, Clock, MapPin, User, Users, FileText, Building2 } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+  Clock,
+  MapPin,
+  User,
+  Users,
+  FileText,
+  Building2,
+} from 'lucide-react';
 import ProgressBar from '../../components/ui/ProgressBar';
 
 const BasicInfo: React.FC = () => {
@@ -20,14 +30,18 @@ const BasicInfo: React.FC = () => {
     address: 'Rua das Acácias, 123',
     city: 'São Paulo',
     state: 'SP',
-    zipCode: '01234-567'
+    zipCode: '01234-567',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -53,23 +67,24 @@ const BasicInfo: React.FC = () => {
     'Telhas',
     'Não Conformidades',
     'Fotos',
-    'Finalização'
+    'Finalização',
   ];
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-6">
       <div className="flex items-center mb-6">
-        <Link to="/selecao-cliente" className="text-gray-500 hover:text-gray-700 mr-2">
+        <Link
+          to="/selecao-cliente"
+          className="text-gray-500 hover:text-gray-700 mr-2"
+        >
           <ChevronLeft className="h-5 w-5" />
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Informações Básicas</h1>
+        <h1 className="text-2xl font-bold text-gray-900">
+          Informações Básicas
+        </h1>
       </div>
 
-      <ProgressBar 
-        currentStep={2} 
-        totalSteps={6} 
-        labels={inspectionSteps}
-      />
+      <ProgressBar currentStep={2} totalSteps={6} labels={inspectionSteps} />
 
       <form onSubmit={handleSubmit} className="mt-6">
         <div className="bg-white shadow rounded-lg overflow-hidden">
@@ -79,7 +94,7 @@ const BasicInfo: React.FC = () => {
               <Building2 className="h-5 w-5 mr-2 text-blue-500" />
               Informações do Cliente
             </h2>
-            
+
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -160,7 +175,7 @@ const BasicInfo: React.FC = () => {
               <User className="h-5 w-5 mr-2 text-blue-500" />
               Informações de Contato
             </h2>
-            
+
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -214,7 +229,7 @@ const BasicInfo: React.FC = () => {
               <FileText className="h-5 w-5 mr-2 text-blue-500" />
               Detalhes da Vistoria
             </h2>
-            
+
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -252,7 +267,7 @@ const BasicInfo: React.FC = () => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Tipo de Empreendimento <span className="text-red-500">*</span>
@@ -265,8 +280,12 @@ const BasicInfo: React.FC = () => {
                   className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 >
                   <option value="">Selecione o tipo</option>
-                  <option value="residencial_unifamiliar">Residencial Unifamiliar</option>
-                  <option value="residencial_multifamiliar">Residencial Multifamiliar</option>
+                  <option value="residencial_unifamiliar">
+                    Residencial Unifamiliar
+                  </option>
+                  <option value="residencial_multifamiliar">
+                    Residencial Multifamiliar
+                  </option>
                   <option value="comercial">Comercial</option>
                   <option value="industrial">Industrial</option>
                   <option value="institucional">Institucional</option>
@@ -290,7 +309,8 @@ const BasicInfo: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Área Estimada do Telhado (m²) <span className="text-red-500">*</span>
+                  Área Estimada do Telhado (m²){' '}
+                  <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -324,7 +344,7 @@ const BasicInfo: React.FC = () => {
             <h2 className="text-lg font-medium text-gray-900 mb-4">
               Problema Principal Relatado
             </h2>
-            
+
             <div>
               <textarea
                 name="mainIssue"
@@ -350,7 +370,9 @@ const BasicInfo: React.FC = () => {
           <button
             type="submit"
             className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-              isFormValid() ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed'
+              isFormValid()
+                ? 'bg-blue-600 hover:bg-blue-700'
+                : 'bg-gray-300 cursor-not-allowed'
             } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
             disabled={!isFormValid()}
           >

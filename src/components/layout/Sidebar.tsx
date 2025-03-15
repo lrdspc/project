@@ -1,15 +1,15 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Calendar, 
-  Settings, 
-  HelpCircle, 
+import {
+  LayoutDashboard,
+  Users,
+  Calendar,
+  Settings,
+  HelpCircle,
   FilePlus,
   FileText,
   RefreshCw,
-  Terminal
+  Terminal,
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -35,11 +35,11 @@ const Sidebar = () => {
           <span className="text-xl font-bold">Sistema de Vistorias</span>
         </div>
         <nav className="flex-1 px-2 py-4 space-y-1">
-          {navigation.map((item) => (
+          {navigation.map(item => (
             <NavLink
               key={item.name}
               to={item.path}
-              className={({ isActive }) => 
+              className={({ isActive }) =>
                 `group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
                   isActive
                     ? 'bg-blue-50 text-blue-600'
@@ -51,7 +51,9 @@ const Sidebar = () => {
                 <>
                   <item.icon
                     className={`mr-3 h-5 w-5 ${
-                      isActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-500'
+                      isActive
+                        ? 'text-blue-600'
+                        : 'text-gray-400 group-hover:text-gray-500'
                     }`}
                   />
                   {item.name}
@@ -61,11 +63,11 @@ const Sidebar = () => {
           ))}
         </nav>
         <div className="border-t border-gray-200 px-2 py-4 space-y-1">
-          {secondaryNavigation.map((item) => (
+          {secondaryNavigation.map(item => (
             <NavLink
               key={item.name}
               to={item.path}
-              className={({ isActive }) => 
+              className={({ isActive }) =>
                 `group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
                   isActive
                     ? 'bg-blue-50 text-blue-600'
@@ -77,7 +79,9 @@ const Sidebar = () => {
                 <>
                   <item.icon
                     className={`mr-3 h-5 w-5 ${
-                      isActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-500'
+                      isActive
+                        ? 'text-blue-600'
+                        : 'text-gray-400 group-hover:text-gray-500'
                     }`}
                   />
                   {item.name}

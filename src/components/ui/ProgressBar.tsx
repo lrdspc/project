@@ -6,22 +6,24 @@ interface ProgressBarProps {
   labels?: string[];
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ 
-  currentStep, 
+const ProgressBar: React.FC<ProgressBarProps> = ({
+  currentStep,
   totalSteps,
-  labels = []
+  labels = [],
 }) => {
   return (
     <div className="w-full py-4">
       <div className="flex items-center justify-between mb-2">
         {Array.from({ length: totalSteps }).map((_, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className={`flex flex-col items-center ${index === 0 ? 'items-start' : ''} ${index === totalSteps - 1 ? 'items-end' : ''}`}
           >
-            <div 
+            <div
               className={`w-8 h-8 flex items-center justify-center rounded-full ${
-                index + 1 <= currentStep ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
+                index + 1 <= currentStep
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-500'
               }`}
             >
               {index + 1}
@@ -36,8 +38,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       </div>
       <div className="relative pt-1">
         <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
-          <div 
-            style={{ width: `${(currentStep / totalSteps) * 100}%` }} 
+          <div
+            style={{ width: `${(currentStep / totalSteps) * 100}%` }}
             className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-600"
           />
         </div>

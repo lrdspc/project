@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
+import {
   ArrowRight,
   FileText,
   Clock,
   MapPin,
   User,
   Building,
-  ChevronLeft
+  ChevronLeft,
 } from 'lucide-react';
 
 const NewInspection: React.FC = () => {
@@ -29,11 +29,15 @@ const NewInspection: React.FC = () => {
             <div className="p-3 bg-blue-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <FileText className="h-8 w-8 text-blue-600" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Criar Nova Vistoria</h2>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              Criar Nova Vistoria
+            </h2>
             <p className="text-gray-500 mb-6">
-              Siga o passo a passo para realizar uma nova vistoria técnica, documentando informações essenciais e não conformidades encontradas.
+              Siga o passo a passo para realizar uma nova vistoria técnica,
+              documentando informações essenciais e não conformidades
+              encontradas.
             </p>
-            
+
             <div className="space-y-4 mb-8">
               <div className="flex items-center text-sm text-gray-600">
                 <Clock className="h-5 w-5 mr-3 text-gray-400" />
@@ -65,45 +69,81 @@ const NewInspection: React.FC = () => {
           </h3>
           <ol className="space-y-4">
             <li className="flex">
-              <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 text-sm font-medium">1</div>
+              <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 text-sm font-medium">
+                1
+              </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-900">Seleção do Cliente</p>
-                <p className="text-xs text-gray-500">Selecione um cliente existente ou cadastre um novo</p>
+                <p className="text-sm font-medium text-gray-900">
+                  Seleção do Cliente
+                </p>
+                <p className="text-xs text-gray-500">
+                  Selecione um cliente existente ou cadastre um novo
+                </p>
               </div>
             </li>
             <li className="flex">
-              <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-sm font-medium">2</div>
+              <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-sm font-medium">
+                2
+              </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-900">Informações Básicas</p>
-                <p className="text-xs text-gray-500">Dados do empreendimento e responsáveis</p>
+                <p className="text-sm font-medium text-gray-900">
+                  Informações Básicas
+                </p>
+                <p className="text-xs text-gray-500">
+                  Dados do empreendimento e responsáveis
+                </p>
               </div>
             </li>
             <li className="flex">
-              <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-sm font-medium">3</div>
+              <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-sm font-medium">
+                3
+              </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-900">Seleção de Telhas</p>
-                <p className="text-xs text-gray-500">Identificação e quantificação dos produtos instalados</p>
+                <p className="text-sm font-medium text-gray-900">
+                  Seleção de Telhas
+                </p>
+                <p className="text-xs text-gray-500">
+                  Identificação e quantificação dos produtos instalados
+                </p>
               </div>
             </li>
             <li className="flex">
-              <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-sm font-medium">4</div>
+              <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-sm font-medium">
+                4
+              </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-900">Não Conformidades</p>
-                <p className="text-xs text-gray-500">Registro de problemas encontrados</p>
+                <p className="text-sm font-medium text-gray-900">
+                  Não Conformidades
+                </p>
+                <p className="text-xs text-gray-500">
+                  Registro de problemas encontrados
+                </p>
               </div>
             </li>
             <li className="flex">
-              <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-sm font-medium">5</div>
+              <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-sm font-medium">
+                5
+              </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-900">Registro Fotográfico</p>
-                <p className="text-xs text-gray-500">Capturas de imagens com anotações</p>
+                <p className="text-sm font-medium text-gray-900">
+                  Registro Fotográfico
+                </p>
+                <p className="text-xs text-gray-500">
+                  Capturas de imagens com anotações
+                </p>
               </div>
             </li>
             <li className="flex">
-              <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-sm font-medium">6</div>
+              <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-sm font-medium">
+                6
+              </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-900">Revisão e Finalização</p>
-                <p className="text-xs text-gray-500">Confirmação dos dados e geração do relatório</p>
+                <p className="text-sm font-medium text-gray-900">
+                  Revisão e Finalização
+                </p>
+                <p className="text-xs text-gray-500">
+                  Confirmação dos dados e geração do relatório
+                </p>
               </div>
             </li>
           </ol>
