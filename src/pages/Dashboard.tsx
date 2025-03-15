@@ -14,21 +14,37 @@ import {
   ChevronRight,
   ClipboardList,
   Camera,
-  CheckCircle
+  Building
 } from 'lucide-react';
 import { format, addDays, isSameDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 import { useInspections } from '../hooks/useInspections';
 import { useProfile } from '../hooks/useProfile';
-import ScheduledInspection from '../components/dashboard/ScheduledInspection';
 import PendingReport from '../components/dashboard/PendingReport';
 
+// Definição do tipo para inspeções
+interface Client {
+  id: string;
+  name: string;
+  city?: string;
+  state?: string;
+}
+
+interface Inspection {
+  id: string;
+  client_id: string;
+  inspection_date: string;
+  status: string;
+  building_type?: string;
+  roof_area?: number;
+  clients?: Client;
+}
+
 const Dashboard: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const { loading, error, getInspections } = useInspections();
   const { profile } = useProfile();
-  const [inspections, setInspections] = useState([]);
+  const [inspections, setInspections] = useState<Inspection[]>([]);
   
   useEffect(() => {
     loadInspections();
@@ -258,13 +274,7 @@ const Dashboard: React.FC = () => {
                   {inspections.map((inspection) => (
                     <ScheduledInspection
                       key={inspection.id}
-                      id={inspection.id}
-                      clientName={inspection.clientName}
-                      location={inspection.location}
-                      buildingType={inspection.buildingType}
-                      dateTime={inspection.dateTime}
-                      status={inspection.status}
-                      onClick={() => console.log(`Clicked inspection ${inspection.id}`)}
+                      inspection={inspection}
                     />
                   ))}
                 </div>
@@ -422,6 +432,41 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+// Definir o componente corrigindo a tipagem
+const ScheduledInspection: React.FC<{ inspection: Inspection }> = ({ inspection }) => {
+  return (
+    <Link to={`/vistoria/${inspection.id}`} className="block hover:bg-gray-50">
+      <div className="px-4 py-4 sm:px-6 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <div className="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
+              <Building className="h-5 w-5 text-blue-600" />
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-900">{inspection.clients?.name}</p>
+              <p className="text-sm text-gray-500">
+                {format(new Date(inspection.inspection_date), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
+              inspection.status === 'completed' ? 'bg-green-100 text-green-800' : 
+              inspection.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' : 
+              'bg-gray-100 text-gray-800'
+            }`}>
+              {inspection.status === 'completed' ? 'Concluída' : 
+               inspection.status === 'in_progress' ? 'Em Andamento' : 
+               'Pendente'}
+            </span>
+            <ChevronRight className="ml-2 h-5 w-5 text-gray-400" />
+          </div>
+        </div>
+      </div>
+    </Link>
   );
 };
 

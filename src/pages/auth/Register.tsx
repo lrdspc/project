@@ -6,7 +6,7 @@ import { supabase } from '../../lib/supabase';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
-  const { loading, error, session } = useAuth();
+  const { loading, session } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -19,6 +19,12 @@ const Register: React.FC = () => {
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          data: {
+            full_name: fullName
+          }
+        }
       });
 
       if (signUpError) throw signUpError;
@@ -37,15 +43,33 @@ const Register: React.FC = () => {
 
         if (profileError) throw profileError;
 
-        // Redirect to login
-        navigate('/login', { 
-          state: { 
-            message: 'Conta criada com sucesso! Por favor, faça login.' 
-          }
-        });
+        // Em ambiente de desenvolvimento, exibir mensagem com instruções para simular a verificação
+        // Isso é necessário porque os emails podem não ser enviados em ambiente de desenvolvimento
+        console.log(`
+          Para teste em desenvolvimento:
+          ${window.location.origin}/auth/callback#access_token=${authData.session?.access_token || ''}&refresh_token=${authData.session?.refresh_token || ''}&type=signup
+        `);
+
+        // Redirect to email confirmation page
+        navigate('/confirmar-email');
       }
     } catch (err) {
-      setRegistrationError(err instanceof Error ? err.message : 'Erro ao criar conta');
+      console.error('Erro de registro:', err);
+      
+      // Verificar erro específico de usuário já cadastrado
+      if (err instanceof Error) {
+        if (err.message.includes('User already registered')) {
+          setRegistrationError('Este email já está cadastrado. Tente fazer login.');
+        } else if (err.message.includes('Invalid email')) {
+          setRegistrationError('Email inválido. Verifique e tente novamente.');
+        } else if (err.message.includes('Password should be')) {
+          setRegistrationError('A senha não atende aos requisitos mínimos (mínimo 6 caracteres).');
+        } else {
+          setRegistrationError(err.message);
+        }
+      } else {
+        setRegistrationError('Erro ao criar conta. Tente novamente.');
+      }
     }
   };
 
@@ -69,13 +93,23 @@ const Register: React.FC = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          {(registrationError) && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+              <span className="block sm:inline">{registrationError}</span>
+              {registrationError.includes('já está cadastrado') && (
+                <div className="mt-2">
+                  <Link
+                    to="/login"
+                    className="text-blue-600 font-medium hover:text-blue-500"
+                  >
+                    Ir para página de login
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+          
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {(error || registrationError) && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
-                <span className="block sm:inline">{error || registrationError}</span>
-              </div>
-            )}
-
             <div>
               <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
                 Nome Completo

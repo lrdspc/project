@@ -96,4 +96,4 @@ const RecentActivity: React.FC = () => {
   );
 };
 
-export default RecentActivity;
+export default RecentActivity; 

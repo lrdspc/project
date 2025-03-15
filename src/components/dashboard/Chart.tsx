@@ -50,15 +50,15 @@ const Chart: React.FC = () => {
       ctx.strokeStyle = '#f3f4f6';
       ctx.stroke();
 
-      // Y-axis labels (revenue)
+      // Revenue labels on left
       const revenueValue = Math.round(maxRevenue - (maxRevenue / gridLines) * i);
-      ctx.fillText(`$${revenueValue}`, padding - 5, y + 3);
+      ctx.fillText(`$${revenueValue.toLocaleString()}`, padding - 5, y + 3);
     }
 
-    // Draw x-axis labels
+    // Draw month labels
     ctx.textAlign = 'center';
     const barWidth = chartWidth / months.length;
-    
+
     months.forEach((month, i) => {
       const x = padding + barWidth * i + barWidth / 2;
       ctx.fillText(month, x, height - padding + 15);
@@ -66,53 +66,55 @@ const Chart: React.FC = () => {
 
     // Draw revenue line
     ctx.beginPath();
+    ctx.moveTo(
+      padding + (chartWidth / revenueData.length) * 0.5,
+      padding + chartHeight - (revenueData[0] / maxRevenue) * chartHeight
+    );
+
     revenueData.forEach((value, i) => {
-      const x = padding + barWidth * i + barWidth / 2;
+      const x = padding + (chartWidth / revenueData.length) * (i + 0.5);
       const y = padding + chartHeight - (value / maxRevenue) * chartHeight;
-      
-      if (i === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
+      ctx.lineTo(x, y);
     });
-    ctx.strokeStyle = '#4f46e5';
-    ctx.lineWidth = 3;
+
+    ctx.strokeStyle = '#3b82f6';
+    ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Add points to revenue line
+    // Draw revenue points
     revenueData.forEach((value, i) => {
-      const x = padding + barWidth * i + barWidth / 2;
+      const x = padding + (chartWidth / revenueData.length) * (i + 0.5);
       const y = padding + chartHeight - (value / maxRevenue) * chartHeight;
       
       ctx.beginPath();
       ctx.arc(x, y, 4, 0, Math.PI * 2);
-      ctx.fillStyle = '#4f46e5';
+      ctx.fillStyle = '#3b82f6';
       ctx.fill();
       ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 1;
       ctx.stroke();
     });
 
     // Draw users line
     ctx.beginPath();
+    ctx.moveTo(
+      padding + (chartWidth / usersData.length) * 0.5,
+      padding + chartHeight - (usersData[0] / maxUsers) * chartHeight
+    );
+
     usersData.forEach((value, i) => {
-      const x = padding + barWidth * i + barWidth / 2;
+      const x = padding + (chartWidth / usersData.length) * (i + 0.5);
       const y = padding + chartHeight - (value / maxUsers) * chartHeight;
-      
-      if (i === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
+      ctx.lineTo(x, y);
     });
+
     ctx.strokeStyle = '#10b981';
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Add points to users line
+    // Draw users points
     usersData.forEach((value, i) => {
-      const x = padding + barWidth * i + barWidth / 2;
+      const x = padding + (chartWidth / usersData.length) * (i + 0.5);
       const y = padding + chartHeight - (value / maxUsers) * chartHeight;
       
       ctx.beginPath();
@@ -120,66 +122,51 @@ const Chart: React.FC = () => {
       ctx.fillStyle = '#10b981';
       ctx.fill();
       ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 1;
       ctx.stroke();
     });
 
-    // Add legend
-    const legendX = width - padding - 150;
+    // Draw legend
+    const legendX = width - padding - 120;
     const legendY = padding + 20;
 
     // Revenue legend
     ctx.beginPath();
-    ctx.moveTo(legendX, legendY);
-    ctx.lineTo(legendX + 20, legendY);
-    ctx.strokeStyle = '#4f46e5';
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    
-    ctx.beginPath();
-    ctx.arc(legendX + 10, legendY, 4, 0, Math.PI * 2);
-    ctx.fillStyle = '#4f46e5';
+    ctx.rect(legendX, legendY, 12, 12);
+    ctx.fillStyle = '#3b82f6';
     ctx.fill();
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    
-    ctx.fillStyle = '#374151';
     ctx.textAlign = 'left';
-    ctx.font = '12px Arial';
-    ctx.fillText('Revenue', legendX + 30, legendY + 4);
+    ctx.fillStyle = '#6b7280';
+    ctx.fillText('Revenue', legendX + 20, legendY + 10);
 
     // Users legend
     ctx.beginPath();
-    ctx.moveTo(legendX, legendY + 20);
-    ctx.lineTo(legendX + 20, legendY + 20);
-    ctx.strokeStyle = '#10b981';
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    
-    ctx.beginPath();
-    ctx.arc(legendX + 10, legendY + 20, 4, 0, Math.PI * 2);
+    ctx.rect(legendX, legendY + 20, 12, 12);
     ctx.fillStyle = '#10b981';
     ctx.fill();
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    
-    ctx.fillStyle = '#374151';
-    ctx.fillText('Users', legendX + 30, legendY + 24);
+    ctx.fillStyle = '#6b7280';
+    ctx.fillText('Users', legendX + 20, legendY + 30);
 
   }, []);
 
   return (
-    <div className="w-full h-80">
+    <div className="bg-white p-4 rounded-lg shadow">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-medium text-gray-900">Performance Overview</h2>
+        <div className="flex space-x-2">
+          <button className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-md">Monthly</button>
+          <button className="px-3 py-1 text-sm text-gray-600 rounded-md">Quarterly</button>
+          <button className="px-3 py-1 text-sm text-gray-600 rounded-md">Yearly</button>
+        </div>
+      </div>
       <canvas 
         ref={canvasRef} 
         width={800} 
         height={400} 
-        className="w-full h-full"
-      />
+        className="w-full h-64"
+      ></canvas>
     </div>
   );
 };
 
-export default Chart;
+export default Chart; 

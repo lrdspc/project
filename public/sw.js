@@ -1,13 +1,14 @@
-const CACHE_NAME = 'brasilit-v2';
+const CACHE_NAME = 'brasilit-cache-v1';
 const RUNTIME_CACHE = 'runtime-cache';
 
-// Arquivos para cache inicial
+// Lista de recursos que devem ser cacheados para funcionamento offline
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  '/icon-192x192.png',
+  '/icon-512x512.png',
+  // Adicione aqui outros arquivos essenciais (CSS, JS)
 ];
 
 // Variáveis para monitoramento
@@ -17,7 +18,7 @@ let totalOfflineTime = 0;
 let lastOfflineStart = null;
 let isOnline = true;
 
-// Instalação do Service Worker
+// Instalação do service worker - pré-cachear recursos
 self.addEventListener('install', (event) => {
   self.skipWaiting(); // Força a ativação imediata
   
@@ -38,16 +39,14 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   console.log('[ServiceWorker] Ativando...');
   
-  // Notifica o MCP Browser Tools que o service worker está ativo
-  if ('serviceWorkerBrowserTools' in self) {
-    self.serviceWorkerBrowserTools.ready();
-  }
-  
+  const cacheWhitelist = [CACHE_NAME];
+
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE) {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            // Se o nome do cache não estiver na whitelist, excluí-lo
             console.log('[ServiceWorker] Removendo cache antigo:', cacheName);
             return caches.delete(cacheName);
           }
@@ -80,55 +79,55 @@ self.addEventListener('offline', () => {
   lastOfflineStart = Date.now();
 });
 
-// Estratégia de cache: Stale-While-Revalidate
+// Interceptar requisições e servir do cache quando possível
 self.addEventListener('fetch', (event) => {
-  // Ignorar requisições não GET ou para outras origens (CORS)
-  if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
-    return;
-  }
-  
-  networkRequestCount++;
-  
   event.respondWith(
     caches.match(event.request)
-      .then((cachedResponse) => {
-        const fetchPromise = fetch(event.request)
-          .then((networkResponse) => {
-            // Armazena a resposta no cache runtime
-            if (networkResponse && networkResponse.status === 200) {
-              const responseToCache = networkResponse.clone();
-              caches.open(RUNTIME_CACHE)
-                .then((cache) => {
-                  cache.put(event.request, responseToCache);
-                });
-            }
-            return networkResponse;
-          })
-          .catch((error) => {
-            console.log('[ServiceWorker] Erro de fetch:', error);
-            return null;
-          });
-          
-        if (cachedResponse) {
-          cacheHitCount++;
-          console.log('[ServiceWorker] Cache hit for:', event.request.url);
-          // Retorna cached response imediatamente, mas atualiza o cache em background
-          return cachedResponse || fetchPromise;
+      .then((response) => {
+        // Cache hit - retornar resposta do cache
+        if (response) {
+          return response;
         }
-        
-        return fetchPromise;
+
+        // Clonar a requisição porque é um stream que só pode ser consumido uma vez
+        const fetchRequest = event.request.clone();
+
+        // Tentar buscar o recurso da rede
+        return fetch(fetchRequest)
+          .then((response) => {
+            // Verificar se recebemos uma resposta válida
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+
+            // Clonar a resposta porque é um stream que só pode ser consumido uma vez
+            const responseToCache = response.clone();
+
+            // Abrir o cache e armazenar a resposta
+            caches.open(CACHE_NAME)
+              .then((cache) => {
+                cache.put(event.request, responseToCache);
+              });
+
+            return response;
+          });
+      })
+      .catch(() => {
+        // Se falhar tudo, tente servir uma página offline
+        if (event.request.mode === 'navigate') {
+          return caches.match('/offline.html');
+        }
       })
   );
 });
 
-// Interceptação de mensagens (para comunicação com MCP Browser Tools)
+// Simplificando a interceptação de mensagens
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'GET_STATS') {
-    // Envia estatísticas para o cliente
+    // Envia estatísticas básicas para o cliente
     event.ports[0].postMessage({
       networkRequests: networkRequestCount,
       cacheHits: cacheHitCount,
-      offlineTime: totalOfflineTime,
       isOnline: isOnline
     });
   }

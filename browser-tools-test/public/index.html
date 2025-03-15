@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP Browser Tools Teste</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .card h2 {
+      margin-top: 0;
+      color: #2563eb;
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 10px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #1d4ed8;
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      overflow: auto;
+      font-size: 14px;
+    }
+    .status {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .status.connected {
+      background-color: #d1fae5;
+      color: #047857;
+    }
+    .status.disconnected {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+    .log-container {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MCP Browser Tools Tester</h1>
+    <p>Página de teste para integração com a extensão MCP Browser Tools</p>
+    <div id="connection-status" class="status disconnected">VERIFICANDO CONEXÃO...</div>
+  </header>
+
+  <div class="card">
+    <h2>Controles</h2>
+    <button id="check-connection">Verificar Conexão</button>
+    <button id="generate-logs">Gerar Logs</button>
+    <button id="generate-error">Gerar Erro</button>
+    <button id="make-network-request">Fazer Requisição</button>
+  </div>
+
+  <div class="card">
+    <h2>Status</h2>
+    <div id="status-output">Aguardando ações...</div>
+  </div>
+
+  <div class="card">
+    <h2>Logs do Console</h2>
+    <div class="log-container">
+      <pre id="console-logs"></pre>
+    </div>
+  </div>
+
+  <script>
+    // Elementos da página
+    const connectionStatus = document.getElementById('connection-status');
+    const statusOutput = document.getElementById('status-output');
+    const consoleLogs = document.getElementById('console-logs');
+    
+    // Botões
+    const checkConnectionBtn = document.getElementById('check-connection');
+    const generateLogsBtn = document.getElementById('generate-logs');
+    const generateErrorBtn = document.getElementById('generate-error');
+    const makeNetworkRequestBtn = document.getElementById('make-network-request');
+
+    // Função para adicionar mensagens ao log
+    function addToLog(message) {
+      const timestamp = new Date().toISOString();
+      consoleLogs.innerHTML += `${timestamp} - ${message}\n`;
+      consoleLogs.scrollTop = consoleLogs.scrollHeight;
+      console.log(message);
+    }
+
+    // Verificar conexão com o servidor
+    async function checkConnection() {
+      try {
+        addToLog("Verificando conexão com o servidor...");
+        const response = await fetch('http://localhost:3025/.identity');
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.signature === "mcp-browser-connector-24x7") {
+            connectionStatus.textContent = "CONECTADO";
+            connectionStatus.className = "status connected";
+            addToLog("Servidor conectado! Versão: " + data.version);
+            return true;
+          }
+        }
+        
+        throw new Error("Assinatura do servidor inválida");
+      } catch (error) {
+        connectionStatus.textContent = "DESCONECTADO";
+        connectionStatus.className = "status disconnected";
+        addToLog("Erro ao conectar: " + error.message);
+        return false;
+      }
+    }
+
+    // Gerar logs de teste
+    function generateLogs() {
+      addToLog("Gerando logs de teste...");
+      console.log("Log de teste 1");
+      console.info("Informação de teste");
+      console.warn("Aviso de teste");
+      
+      // Objeto complexo
+      console.log("Objeto de teste:", { 
+        id: 123, 
+        name: "Teste", 
+        items: [1, 2, 3],
+        nested: {
+          a: true,
+          b: false
+        }
+      });
+      
+      addToLog("Logs gerados com sucesso");
+    }
+
+    // Gerar erro de teste
+    function generateError() {
+      addToLog("Gerando erro de teste...");
+      try {
+        // Causar erro deliberadamente
+        const obj = null;
+        obj.nonExistentMethod();
+      } catch (error) {
+        console.error("Erro capturado:", error.message);
+        addToLog("Erro gerado com sucesso");
+      }
+      
+      // Erro não capturado (comentado para não quebrar a página)
+      // setTimeout(() => undefinedFunction(), 100);
+    }
+
+    // Fazer requisição de rede
+    async function makeNetworkRequest() {
+      addToLog("Fazendo requisição de rede...");
+      
+      try {
+        // Requisição bem-sucedida
+        const response1 = await fetch('https://jsonplaceholder.typicode.com/todos/1');
+        const data1 = await response1.json();
+        console.log("Resposta recebida:", data1);
+        
+        // Requisição com erro (para demonstração)
+        try {
+          const response2 = await fetch('https://servidor-que-nao-existe.com/api');
+          const data2 = await response2.json();
+        } catch (networkError) {
+          console.error("Erro de rede:", networkError.message);
+        }
+        
+        addToLog("Requisições de rede concluídas");
+      } catch (error) {
+        addToLog("Erro ao fazer requisição: " + error.message);
+      }
+    }
+
+    // Event listeners para os botões
+    checkConnectionBtn.addEventListener('click', checkConnection);
+    generateLogsBtn.addEventListener('click', generateLogs);
+    generateErrorBtn.addEventListener('click', generateError);
+    makeNetworkRequestBtn.addEventListener('click', makeNetworkRequest);
+
+    // Verificar conexão ao carregar a página
+    window.addEventListener('load', () => {
+      addToLog("Página carregada");
+      checkConnection();
+    });
+
+    // Executar teste automático a cada 5 segundos
+    setInterval(async () => {
+      const isConnected = await checkConnection();
+      if (isConnected) {
+        statusOutput.textContent = `Servidor conectado. Última verificação: ${new Date().toLocaleTimeString()}`;
+      } else {
+        statusOutput.textContent = `Servidor desconectado. Última verificação: ${new Date().toLocaleTimeString()}`;
+      }
+    }, 5000);
+  </script>
+</body>
+</html> 

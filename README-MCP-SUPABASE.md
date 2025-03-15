@@ -193,4 +193,4 @@ Se encontrar problemas ao usar o MCP Supabase, verifique:
 
 - [Documentação oficial do Supabase](https://supabase.io/docs)
 - [Repositório do supabase-js](https://github.com/supabase/supabase-js)
-- [Guia de autenticação do Supabase](https://supabase.io/docs/guides/auth) 
+- [Guia de autenticação do Supabase](https://supabase.io/docs/guides/auth) c

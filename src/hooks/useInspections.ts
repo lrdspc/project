@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import type { Database } from '../lib/database.types';
 
-type Inspection = Database['public']['Tables']['inspections']['Row'];
 type InsertInspection = Database['public']['Tables']['inspections']['Insert'];
 type UpdateInspection = Database['public']['Tables']['inspections']['Update'];
 
@@ -56,9 +55,11 @@ export function useInspections() {
             address,
             city,
             state,
+            zip_code,
             contact_name,
             contact_phone,
-            contact_email
+            contact_email,
+            type
           ),
           inspection_tiles (
             id,
@@ -73,12 +74,22 @@ export function useInspections() {
             title,
             description,
             notes,
+            created_at,
             inspection_photos (
               id,
               category,
               caption,
-              photo_url
+              photo_url,
+              created_at
             )
+          ),
+          inspection_photos (
+            id,
+            category,
+            caption,
+            photo_url,
+            nonconformity_id,
+            created_at
           )
         `)
         .eq('id', id)

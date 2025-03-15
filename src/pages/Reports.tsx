@@ -1,5 +1,6 @@
 import React from 'react';
-import { FileText, Filter, Download, Eye, MoreHorizontal } from 'lucide-react';
+import { Filter, Download, Eye, MoreHorizontal } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Reports: React.FC = () => {
   // Mock data for reports
@@ -116,7 +117,9 @@ const Reports: React.FC = () => {
                     {report.id}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {report.clientName}
+                    <Link to={`/vistoria/${report.id}`} className="hover:text-blue-600">
+                      {report.clientName}
+                    </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {report.inspectionDate}
@@ -138,9 +141,9 @@ const Reports: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex justify-end space-x-2">
-                      <button className="text-blue-600 hover:text-blue-900">
+                      <Link to={`/vistoria/${report.id}`} className="text-blue-600 hover:text-blue-900">
                         <Eye className="h-5 w-5" />
-                      </button>
+                      </Link>
                       <button className="text-blue-600 hover:text-blue-900">
                         <Download className="h-5 w-5" />
                       </button>

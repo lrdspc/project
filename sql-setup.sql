@@ -10,12 +10,24 @@
     - inspection_tiles (telhas das vistorias)
     - nonconformities (não conformidades)
     - inspection_photos (fotos das vistorias)
+    - users_profiles (perfis de usuários)
   
   2. Relações:
     - Um cliente pode ter múltiplas vistorias
     - Uma vistoria pode ter múltiplas telhas, não conformidades e fotos
     - Uma não conformidade pode ter múltiplas fotos
+    - Um usuário tem um perfil
 */
+
+-- Create users_profiles table (se não existir)
+CREATE TABLE IF NOT EXISTS users_profiles (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid REFERENCES auth.users ON DELETE CASCADE,
+  full_name text NOT NULL,
+  role text NOT NULL DEFAULT 'technician',
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
 
 -- Create clients table
 CREATE TABLE clients (
