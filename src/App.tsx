@@ -29,6 +29,7 @@ import ReviewAndFinalize from './pages/inspection/ReviewAndFinalize';
 import Reports from './pages/Reports';
 import Clients from './pages/Clients';
 import Calendar from './pages/Calendar';
+import SupabaseTest from './pages/SupabaseTest';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
@@ -43,6 +44,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/supabase-test" element={<SupabaseTest />} />
           <Route path="/*" element={
             <PrivateRoute>
               <div className="flex h-screen bg-gray-50">
