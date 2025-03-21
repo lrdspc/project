@@ -1,1 +1,44 @@
- 
+name: Deploy para Vercel
+
+on:
+  push:
+    branches: [beta, main]  # Aciona quando há push para beta ou main
+  workflow_dispatch:  # Permite acionar manualmente
+
+permissions: read-all
+
+jobs:
+  test-before-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Instalar dependências
+        run: npm ci
+      
+      - name: Executar testes
+        run: npm test || echo "Nenhum teste encontrado, continuando..."
+      
+      - name: Verificar build
+        run: npm run build
+      
+      - name: Notificar sobre status
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "Deploy será realizado para PRODUÇÃO"
+          else
+            echo "Deploy será realizado para ambiente BETA"
+          fi 

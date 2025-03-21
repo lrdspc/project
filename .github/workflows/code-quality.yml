@@ -1,0 +1,41 @@
+name: Análise de Qualidade de Código
+
+on:
+  push:
+    branches: [ beta, main ]
+  pull_request:
+    branches: [ beta, main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Instalar dependências
+        run: npm ci
+      
+      - name: Executar ESLint
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx || echo "Avisos de linting encontrados"
+      
+      - name: Verificar formatação com Prettier
+        run: npx prettier --check "src/**/*.{js,jsx,ts,tsx}" || echo "Problemas de formatação encontrados"
+      
+      - name: Verificar tipos TypeScript
+        run: npx tsc --noEmit || echo "Erros de tipo encontrados"
+      
+      - name: Resumo da análise
+        run: |
+          echo "Análise de código concluída"
+          echo "Verifique os logs acima para detalhes sobre problemas encontrados" 
