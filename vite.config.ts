@@ -34,6 +34,10 @@ export default defineConfig({
       }
     })
   ],
+  server: {
+    port: 5173,
+    strictPort: true, // Vai falhar se a porta estiver em uso em vez de tentar outra
+  },
   optimizeDeps: {
     exclude: ['lucide-react'],
     include: ['react', 'react-dom', 'react-router-dom']

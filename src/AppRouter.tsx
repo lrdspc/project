@@ -9,7 +9,14 @@ import { useProfile } from './hooks/useProfile';
 // Páginas
 import Dashboard from './pages/Dashboard';
 import OfflineMode from './pages/OfflineMode';
-import Login from './pages/Login';
+
+// Páginas de autenticação
+import AuthLogin from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import ResetPassword from './pages/auth/ResetPassword';
+import EmailConfirmation from './pages/auth/EmailConfirmation';
+import VerifyToken from './pages/auth/VerifyToken';
+
 /**
  * Componente para nova vistoria - corrige problema de importação
  * que causava erro "Failed to fetch dynamically imported module"
@@ -35,7 +42,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   if (!profile) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/auth/login" replace />;
   }
 
   return <>{children}</>;
@@ -48,8 +55,15 @@ const AppRouter: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rotas públicas */}
-        <Route path="/login" element={<Login />} />
+        {/* Rotas de autenticação */}
+        <Route path="/auth/login" element={<AuthLogin />} />
+        <Route path="/auth/register" element={<Register />} />
+        <Route path="/auth/reset-password" element={<ResetPassword />} />
+        <Route path="/auth/email-confirmation" element={<EmailConfirmation />} />
+        <Route path="/auth/verify-token" element={<VerifyToken />} />
+        
+        {/* Redirecionar /login para /auth/login para compatibilidade */}
+        <Route path="/login" element={<Navigate to="/auth/login" replace />} />
         
         {/* Rotas protegidas */}
         <Route path="/" element={

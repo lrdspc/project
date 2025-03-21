@@ -1,0 +1,22 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[headers]
+  # Configuração para PWA (Progressive Web App)
+  for = "/manifest.webmanifest"
+    [headers.values]
+    Content-Type = "application/manifest+json"
+  
+  for = "/*.png"
+    [headers.values]
+    Cache-Control = "public, max-age=31536000"
+    
+  for = "/sw.js"
+    [headers.values]
+    Cache-Control = "no-cache" 

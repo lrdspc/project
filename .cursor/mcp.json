@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "node",
+      "args": ["./node_modules/@modelcontextprotocol/server-postgres/dist/index.js", "postgresql://postgres.xlelxwhswkwvioyshvoq:u3aRsNCaShs2hME2@aws-0-sa-east-1.pooler.supabase.com:5432/postgres?sslmode=require&ssl=true&rejectUnauthorized=false"]
+    }
+  }
+} 
